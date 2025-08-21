@@ -87,6 +87,7 @@ const calculateCoilLength = (
     totalLength = lengthPerLayer * possibleLayers
   }
 
+
   const result: PipeCoilCalculationResult = {
     coilLength: totalLength,
     calculationMethod: coilMethod,
