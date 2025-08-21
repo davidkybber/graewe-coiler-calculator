@@ -17,8 +17,8 @@ VitePWA({
         background_color: '#ffffff',
         display: 'standalone',
         orientation: 'portrait',
-        scope: '/',
-        start_url: '/',
+        scope: '/graewe-coiler-calculator/',
+        start_url: '/graewe-coiler-calculator/',
         icons: [
           {
             src: 'pwa-192x192.png',
