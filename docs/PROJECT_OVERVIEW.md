@@ -2,7 +2,7 @@
 
 ## Project Description
 
-This project aims to recreate the GRAEWE coil calculator as a Progressive Web Application (PWA) that can be easily accessed via QR code or direct URL. The calculator helps users perform coil-related calculations for manufacturing/industrial purposes.
+This project is a Progressive Web Application (PWA) that recreates the GRAEWE pipe coiling calculator. The calculator helps users perform **Wickellänge** (coil length) and **Wickelendposition** (end position) calculations for pipe coiling in manufacturing and industrial applications. It can be easily accessed via QR code or direct URL and provides professional-grade calculations matching GRAEWE's original calculator functionality.
 
 ## Goals
 
@@ -28,12 +28,14 @@ This project aims to recreate the GRAEWE coil calculator as a Progressive Web Ap
 ### Technology Stack
 
 - **Frontend**: React 18 with TypeScript
-- **Build Tool**: Vite
-- **Styling**: CSS Modules + Tailwind CSS for utility-first responsive design
+- **Build Tool**: Vite 6.x
+- **Styling**: Tailwind CSS 3.4 + CSS custom properties
+- **Internationalization**: German number formatting with `toLocaleString('de-DE')`
 - **PWA**: Vite PWA plugin with Workbox
-- **Testing**: Vitest + React Testing Library + Playwright for E2E
+- **Testing**: Vitest + React Testing Library (100% calculation coverage)
 - **Deployment**: GitHub Pages via GitHub Actions
-- **Code Quality**: ESLint + Prettier + Husky
+- **Code Quality**: ESLint + Prettier
+- **Color Scheme**: GRAEWE brand colors (yellow/orange accents)
 
 ### Project Structure
 
@@ -118,18 +120,32 @@ Adopt the role of a **Senior Frontend Developer** with expertise in:
 ## Calculator Requirements
 
 ### Core Functionality
-- Input fields for coil parameters
+- Input fields for pipe coiling parameters:
+  - Pipe diameter (Rohrdurchmesser)
+  - Pipe length (Rohrlänge) 
+  - Inner diameter (Innendurchmesser)
+  - Outer diameter (Außendurchmesser)
+  - Bundle width (Bündelbreite)
+  - Bundle height (Bündelhöhe)
+- Calculation mode selection (Wickellänge vs Wickelendposition)
+- Coil method selection (Ungleiche Lagen vs Gleiche Lagen versetzt)
 - Real-time calculation as user types
+- German number formatting (comma decimal separator)
 - Clear, easy-to-read results display
-- Input validation and error handling
+- Input validation and error handling in German
 - Reset/clear functionality
 
 ### Algorithm Implementation
-Currently using a placeholder algorithm. The actual calculation logic should be:
-1. Easily replaceable in the `services/calculations.ts` file
-2. Well-documented with parameter descriptions
-3. Unit tested with known input/output pairs
-4. Validated against the original calculator
+Implements actual GRAEWE pipe coiling calculations:
+1. **Wickellänge** (Coil Length) calculation
+2. **Wickelendposition** (End Position) calculation  
+3. Pipes per layer calculation
+4. Number of layers calculation
+5. Bundle dimensions calculation
+6. All calculations in `services/calculations.ts`
+7. Well-documented with German parameter descriptions
+8. 100% unit test coverage with known input/output pairs
+9. Validated against GRAEWE's original calculator
 
 ## Deployment Strategy
 

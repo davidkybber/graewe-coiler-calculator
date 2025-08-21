@@ -2,8 +2,8 @@
 
 ## Prerequisites
 
-- Node.js 18+ (LTS recommended)
-- npm or yarn package manager
+- Node.js 20.19+ or 22.12+ (required for Vite 6.x compatibility)
+- npm package manager (yarn not recommended due to dependency conflicts)
 - Git
 - VS Code with recommended extensions
 
@@ -141,24 +141,41 @@ npm run deploy
 
 1. **Port already in use**
    ```bash
-   # Kill process on port 5173
+   # Kill process on port 4173 (preview) or 5173 (dev)
+   lsof -ti:4173 | xargs kill -9
    lsof -ti:5173 | xargs kill -9
    ```
 
-2. **Node modules issues**
+2. **Node.js version compatibility**
    ```bash
-   rm -rf node_modules package-lock.json
-   npm install
+   # Check Node.js version
+   node --version
+   # Must be 20.19+ or 22.12+ for Vite 6.x
    ```
 
-3. **TypeScript errors**
+3. **Dependency conflicts**
+   ```bash
+   rm -rf node_modules package-lock.json
+   npm install --legacy-peer-deps
+   # Note: May need @testing-library/dom for screen imports
+   ```
+
+4. **Tailwind CSS not working**
+   ```bash
+   # Ensure PostCSS config includes Tailwind
+   # Check postcss.config.js contains tailwindcss plugin
+   npm run build  # Should show ~20kB CSS file
+   ```
+
+5. **TypeScript errors**
    ```bash
    npm run type-check
    # Fix errors before continuing
    ```
 
-4. **PWA not updating**
-   - Clear browser cache
+6. **PWA not updating**
+   - Clear browser cache completely
+   - Use hard refresh (Cmd+Shift+R / Ctrl+Shift+R)
    - Check service worker in DevTools
    - Rebuild the application
 
@@ -193,9 +210,10 @@ Husky runs the following on commit:
 - No external state management needed for current scope
 
 ### Styling
-- Tailwind CSS for utility classes
-- CSS Modules for component-specific styles
-- Design tokens in `src/styles/tokens.css`
+- Tailwind CSS 3.4 for utility classes with GRAEWE color palette
+- CSS custom properties for GRAEWE brand variables
+- PostCSS with tailwindcss plugin for processing
+- Mobile-first responsive design approach
 
 ### Error Handling
 - Error boundaries for React components

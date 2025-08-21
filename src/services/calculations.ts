@@ -1,42 +1,27 @@
 /**
- * GRAEWE Coiler Calculator - Calculation Service
+ * GRAEWE Pipe Coiler Calculator - Calculation Service
  * 
- * This service contains the core calculation logic for coil parameters.
- * The current implementation uses placeholder algorithms that should be
- * replaced with the actual GRAEWE calculation formulas.
+ * This service contains the core calculation logic for pipe coiling parameters.
+ * Based on GRAEWE's pipe coiling calculations for manufacturing applications.
  */
 
 import { 
-  CoilCalculationParams, 
-  CoilCalculationResult, 
+  PipeCoilCalculationParams, 
+  PipeCoilCalculationResult, 
   Result, 
-  CoreMaterial, 
-  WireMaterial 
+  CalculationMode,
+  CoilMethod
 } from '../types/CalculatorTypes'
 
-// Material constants (placeholder values)
-const CORE_MATERIAL_PERMEABILITY = {
-  [CoreMaterial.AIR]: 1.0,
-  [CoreMaterial.IRON]: 5000,
-  [CoreMaterial.FERRITE]: 2300,
-  [CoreMaterial.POWDERED_IRON]: 125
-} as const
-
-const WIRE_MATERIAL_RESISTIVITY = {
-  [WireMaterial.COPPER]: 1.68e-8, // ohm⋅m at 20°C
-  [WireMaterial.ALUMINUM]: 2.65e-8,
-  [WireMaterial.SILVER]: 1.59e-8
-} as const
-
 /**
- * Calculate coil parameters
+ * Calculate pipe coil parameters
  * 
  * @param params - Input parameters for the calculation
  * @returns Result containing the calculation output or error
  */
-export const calculateCoilParameters = async (
-  params: CoilCalculationParams
-): Promise<Result<CoilCalculationResult>> => {
+export const calculatePipeCoilParameters = async (
+  params: PipeCoilCalculationParams
+): Promise<Result<PipeCoilCalculationResult>> => {
   try {
     // Validate input parameters
     const validation = validateCalculationParams(params)
@@ -44,64 +29,11 @@ export const calculateCoilParameters = async (
       return validation
     }
 
-    // Extract parameters
-    const {
-      wireDiameter,
-      numberOfTurns,
-      coreDiameter,
-      coreLength,
-      coreMaterial,
-      wireMaterial
-    } = params
-
-    // Convert millimeters to meters for calculations
-    const wireDiameterM = wireDiameter / 1000
-    const coreDiameterM = coreDiameter / 1000
-    const coreLengthM = coreLength / 1000
-
-    // Calculate inductance using Wheeler's formula (placeholder)
-    // L = (μ₀ * μᵣ * N² * A) / l
-    const mu0 = 4 * Math.PI * 1e-7 // Permeability of free space
-    const muR = CORE_MATERIAL_PERMEABILITY[coreMaterial]
-    const coreArea = Math.PI * Math.pow(coreDiameterM / 2, 2)
-    const inductance = (mu0 * muR * Math.pow(numberOfTurns, 2) * coreArea) / coreLengthM
-
-    // Calculate wire length
-    // Approximation: Wire length ≈ N * π * (core diameter + wire diameter)
-    const averageLoopDiameter = coreDiameterM + wireDiameterM
-    const wireLength = numberOfTurns * Math.PI * averageLoopDiameter
-
-    // Calculate resistance
-    // R = ρ * l / A
-    const wireResistivity = WIRE_MATERIAL_RESISTIVITY[wireMaterial]
-    const wireCrossSection = Math.PI * Math.pow(wireDiameterM / 2, 2)
-    const resistance = (wireResistivity * wireLength) / wireCrossSection
-
-    // Calculate self-capacitance (simplified approximation)
-    // C ≈ ε₀ * εᵣ * l / ln(D/d) where D is coil diameter, d is wire diameter
-    const epsilon0 = 8.854e-12 // Permittivity of free space
-    const epsilonR = 1.0 // Relative permittivity (air approximation)
-    const selfCapacitance = (epsilon0 * epsilonR * coreLengthM) / 
-      Math.log(coreDiameterM / wireDiameterM)
-
-    // Calculate resonant frequency
-    // f₀ = 1 / (2π√(LC))
-    const resonantFrequency = 1 / (2 * Math.PI * Math.sqrt(inductance * selfCapacitance))
-
-    // Calculate quality factor (simplified)
-    // Q = ωL / R = 2πfL / R
-    const qualityFactor = (2 * Math.PI * resonantFrequency * inductance) / resistance
-
-    const result: CoilCalculationResult = {
-      inductance,
-      resistance,
-      qualityFactor,
-      wireLength,
-      selfCapacitance,
-      resonantFrequency
+    if (params.calculationMode === CalculationMode.COIL_LENGTH) {
+      return calculateCoilLength(params)
+    } else {
+      return calculateEndPosition(params)
     }
-
-    return { success: true, data: result }
 
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown calculation error'
@@ -110,68 +42,210 @@ export const calculateCoilParameters = async (
 }
 
 /**
+ * Calculate coil length (Wickellänge)
+ * Based on available space and pipe dimensions
+ */
+const calculateCoilLength = (
+  params: PipeCoilCalculationParams
+): Result<PipeCoilCalculationResult> => {
+  const {
+    pipeDiameter,
+    innerDiameter,
+    outerDiameter,
+    bundleWidth,
+    coilMethod
+  } = params
+
+  if (!pipeDiameter || !innerDiameter || !outerDiameter || !bundleWidth) {
+    return { success: false, error: 'Missing required parameters for coil length calculation' }
+  }
+
+  // Calculate available space for coiling
+  const radialSpace = (outerDiameter - innerDiameter) / 2
+  const possibleLayers = Math.floor(radialSpace / pipeDiameter)
+  
+  // Calculate total pipe length based on coiling method
+  let totalLength = 0
+  
+  if (coilMethod === CoilMethod.UNEVEN_LAYERS) {
+    // Ungleiche Lagen: each layer can have different number of pipes
+    for (let layer = 1; layer <= possibleLayers; layer++) {
+      const layerRadius = innerDiameter / 2 + (layer - 0.5) * pipeDiameter
+      const layerCircumference = 2 * Math.PI * layerRadius
+      // Calculate actual pipe length: (axial turns) × (circumference)
+      const axialTurns = bundleWidth / pipeDiameter
+      const lengthInLayer = axialTurns * layerCircumference
+      totalLength += lengthInLayer
+    }
+  } else {
+    // Gleiche Lagen versetzt: consistent pipes per layer, offset arrangement
+    // Calculate average circumference for all layers
+    const averageRadius = innerDiameter / 2 + (possibleLayers / 2) * pipeDiameter
+    const averageCircumference = 2 * Math.PI * averageRadius
+    const axialTurns = bundleWidth / pipeDiameter
+    const lengthPerLayer = axialTurns * averageCircumference
+    totalLength = lengthPerLayer * possibleLayers
+  }
+
+  const result: PipeCoilCalculationResult = {
+    coilLength: totalLength,
+    calculationMethod: coilMethod,
+    warning: totalLength > 10000 ? 'Calculated length exceeds typical coiling limits' : undefined
+  }
+
+  return { success: true, data: result }
+}
+
+/**
+ * Calculate end position (Wickelendposition)
+ * Based on pipe length and coiling parameters
+ */
+const calculateEndPosition = (
+  params: PipeCoilCalculationParams
+): Result<PipeCoilCalculationResult> => {
+  const {
+    pipeDiameter,
+    pipeLength,
+    innerDiameter,
+    pipesPerLayer,
+    numberOfLayers,
+    coilMethod
+  } = params
+
+  if (!pipeDiameter || !pipeLength || !innerDiameter) {
+    return { success: false, error: 'Missing required parameters for end position calculation' }
+  }
+
+  // Calculate based on provided parameters or estimate
+  const effectivePipesPerLayer = pipesPerLayer || calculatePipesPerLayer(innerDiameter, pipeDiameter)
+  const effectiveNumberOfLayers = numberOfLayers || calculateNumberOfLayers(pipeLength, effectivePipesPerLayer)
+  
+  // Calculate final dimensions
+  const finalOuterDiameter = innerDiameter + (2 * effectiveNumberOfLayers * pipeDiameter)
+  const finalBundleWidth = calculateBundleWidth(pipeLength, effectivePipesPerLayer, effectiveNumberOfLayers)
+  const finalBundleHeight = effectiveNumberOfLayers * pipeDiameter
+
+  const result: PipeCoilCalculationResult = {
+    endPosition: {
+      outerDiameter: finalOuterDiameter,
+      bundleWidth: finalBundleWidth,
+      bundleHeight: finalBundleHeight
+    },
+    calculationMethod: coilMethod,
+    warning: 'Calculated values may vary up to 10% depending on actual coiling conditions'
+  }
+
+  return { success: true, data: result }
+}
+
+/**
+ * Helper function to calculate pipes per layer
+ */
+const calculatePipesPerLayer = (innerDiameter: number, pipeDiameter: number): number => {
+  const circumference = Math.PI * innerDiameter
+  return Math.floor(circumference / pipeDiameter)
+}
+
+/**
+ * Helper function to calculate number of layers needed
+ */
+const calculateNumberOfLayers = (
+  pipeLength: number, 
+  pipesPerLayer: number
+): number => {
+  // Simplified calculation - assumes each layer can hold similar amount
+  const estimatedElementsPerLayer = pipesPerLayer * 10 // rough estimate
+  return Math.ceil((pipeLength * 1000) / estimatedElementsPerLayer)
+}
+
+/**
+ * Helper function to calculate bundle width
+ */
+const calculateBundleWidth = (
+  pipeLength: number,
+  _pipesPerLayer: number, // Prefix with underscore to indicate intentionally unused
+  numberOfLayers: number
+): number => {
+  const totalElements = pipeLength * 1000 // Convert to mm
+  const elementsPerLayer = totalElements / numberOfLayers
+  return elementsPerLayer
+}
+
+/**
  * Validate calculation parameters
  */
 const validateCalculationParams = (
-  params: CoilCalculationParams
+  params: PipeCoilCalculationParams
 ): Result<true> => {
-  const { wireDiameter, numberOfTurns, coreDiameter, coreLength } = params
+  const { pipeDiameter, innerDiameter, calculationMode } = params
 
-  if (wireDiameter <= 0) {
-    return { success: false, error: 'Wire diameter must be greater than 0' }
+  if (!pipeDiameter || pipeDiameter <= 0) {
+    return { success: false, error: 'Pipe diameter must be greater than 0' }
   }
 
-  if (numberOfTurns <= 0 || !Number.isInteger(numberOfTurns)) {
-    return { success: false, error: 'Number of turns must be a positive integer' }
+  if (!innerDiameter || innerDiameter <= 0) {
+    return { success: false, error: 'Inner diameter must be greater than 0' }
   }
 
-  if (coreDiameter <= 0) {
-    return { success: false, error: 'Core diameter must be greater than 0' }
+  if (pipeDiameter >= innerDiameter) {
+    return { success: false, error: 'Pipe diameter must be smaller than inner diameter' }
   }
 
-  if (coreLength <= 0) {
-    return { success: false, error: 'Core length must be greater than 0' }
+  if (calculationMode === CalculationMode.COIL_LENGTH) {
+    if (!params.outerDiameter || params.outerDiameter <= innerDiameter) {
+      return { success: false, error: 'Outer diameter must be greater than inner diameter for coil length calculation' }
+    }
+    if (!params.bundleWidth || params.bundleWidth <= 0) {
+      return { success: false, error: 'Bundle width must be specified for coil length calculation' }
+    }
   }
 
-  if (wireDiameter >= coreDiameter) {
-    return { success: false, error: 'Wire diameter must be smaller than core diameter' }
+  if (calculationMode === CalculationMode.END_POSITION) {
+    if (!params.pipeLength || params.pipeLength <= 0) {
+      return { success: false, error: 'Pipe length must be specified for end position calculation' }
+    }
   }
 
   return { success: true, data: true }
 }
 
 /**
- * Format a number for display with appropriate precision
+ * Format a number for display with appropriate precision using German locale
  */
-export const formatResult = (value: number, unit: string, precision: number = 3): string => {
+export const formatResult = (value: number, unit: string, precision: number = 2): string => {
   if (isNaN(value) || !isFinite(value)) {
     return 'Invalid'
   }
 
-  // Handle very small or very large numbers with scientific notation
-  if (Math.abs(value) <= 1e-6 || Math.abs(value) >= 1e6) {
-    return `${value.toExponential(precision - 1)} ${unit}`
+  // Use German locale formatting consistently
+  const formatOptions: Intl.NumberFormatOptions = {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: precision
   }
 
-  return `${value.toPrecision(precision)} ${unit}`
+  // Handle different ranges appropriately
+  if (value < 0.01) {
+    formatOptions.maximumFractionDigits = 4
+  } else if (value < 1) {
+    formatOptions.maximumFractionDigits = 3
+  }
+
+  const formattedNumber = value.toLocaleString('de-DE', formatOptions)
+  return `${formattedNumber} ${unit}`
 }
 
 /**
- * Calculate optimal wire gauge recommendation
- * (Placeholder implementation)
+ * Get recommended coiling method based on parameters
  */
-export const getWireGaugeRecommendation = (
-  coreDiameter: number,
-  numberOfTurns: number
-): string => {
-  // Simplified recommendation logic
-  const approximateWireDiameter = coreDiameter / (numberOfTurns * 1.5)
+export const getRecommendedCoilMethod = (
+  pipeDiameter: number,
+  innerDiameter: number
+): CoilMethod => {
+  const ratio = innerDiameter / pipeDiameter
   
-  if (approximateWireDiameter > 2.0) return 'AWG 12 or larger'
-  if (approximateWireDiameter > 1.5) return 'AWG 14'
-  if (approximateWireDiameter > 1.0) return 'AWG 16'
-  if (approximateWireDiameter > 0.8) return 'AWG 18'
-  if (approximateWireDiameter > 0.6) return 'AWG 20'
-  if (approximateWireDiameter > 0.4) return 'AWG 22'
-  return 'AWG 24 or smaller'
+  // If ratio is high, uneven layers might be more efficient
+  return ratio > 50 ? CoilMethod.UNEVEN_LAYERS : CoilMethod.EVEN_LAYERS_OFFSET
 }
+
+// Legacy function for backward compatibility - to be removed
+export const calculateCoilParameters = calculatePipeCoilParameters

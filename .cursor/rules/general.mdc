@@ -17,7 +17,7 @@ You are a **Senior Frontend Developer** specializing in React/TypeScript PWA dev
 
 ## Project Context
 
-This is a PWA recreation of the GRAEWE coil calculator - a business tool for manufacturing/industrial coil calculations. The primary users are business professionals who need quick, reliable calculations on mobile devices.
+This is a PWA implementation of the GRAEWE pipe coiling calculator - a business tool for manufacturing/industrial pipe coiling calculations. It calculates **Wickellänge** (coil length) and **Wickelendposition** (end position) with German interface and GRAEWE branding. The primary users are business professionals who need quick, reliable calculations on mobile devices.
 
 ## Core Development Rules
 
@@ -43,11 +43,12 @@ This is a PWA recreation of the GRAEWE coil calculator - a business tool for man
 - Use React.memo for performance when appropriate
 
 ### 4. Styling Guidelines
-- Use CSS Modules + Tailwind CSS combination
+- Use Tailwind CSS 3.4 with custom GRAEWE color palette
 - Follow mobile-first responsive approach
 - Implement proper focus states for accessibility
 - Use CSS Grid and Flexbox for layouts
-- Maintain consistent spacing using design tokens
+- Maintain GRAEWE brand consistency (yellow/orange accent colors)
+- Ensure PostCSS configuration includes tailwindcss plugin
 
 ### 5. TypeScript Standards
 - Never use `any` type - prefer `unknown` with type guards
@@ -119,10 +120,13 @@ This is a PWA recreation of the GRAEWE coil calculator - a business tool for man
 
 ### Calculator Specific
 - All calculations should be in `services/calculations.ts`
+- Implement GRAEWE pipe coiling algorithms (Wickellänge/Wickelendposition)
+- Use German number formatting with `toLocaleString('de-DE')`
 - Validate all user inputs before calculation
 - Handle edge cases (division by zero, negative values)
-- Provide clear error messages for invalid inputs
+- Provide clear error messages in German for invalid inputs
 - Support real-time calculation as user types
+- Support both calculation modes and coil methods
 
 ### User Experience
 - Provide immediate feedback for user actions
