@@ -64,10 +64,6 @@ const calculateCoilLength = (
   const radialSpace = (outerDiameter - innerDiameter) / 2
   const possibleLayers = Math.floor(radialSpace / pipeDiameter)
   
-  // Calculate pipes per layer based on circumference
-  const averageCircumference = Math.PI * (innerDiameter + radialSpace)
-  const pipesPerLayer = Math.floor(averageCircumference / pipeDiameter)
-  
   // Calculate total pipe length based on coiling method
   let totalLength = 0
   
@@ -76,13 +72,18 @@ const calculateCoilLength = (
     for (let layer = 1; layer <= possibleLayers; layer++) {
       const layerRadius = innerDiameter / 2 + (layer - 0.5) * pipeDiameter
       const layerCircumference = 2 * Math.PI * layerRadius
-      const pipesInLayer = Math.floor(layerCircumference / pipeDiameter)
-      const lengthInLayer = (bundleWidth / pipeDiameter) * pipesInLayer
+      // Calculate actual pipe length: (axial turns) × (circumference)
+      const axialTurns = bundleWidth / pipeDiameter
+      const lengthInLayer = axialTurns * layerCircumference
       totalLength += lengthInLayer
     }
   } else {
     // Gleiche Lagen versetzt: consistent pipes per layer, offset arrangement
-    const lengthPerLayer = (bundleWidth / pipeDiameter) * pipesPerLayer
+    // Calculate average circumference for all layers
+    const averageRadius = innerDiameter / 2 + (possibleLayers / 2) * pipeDiameter
+    const averageCircumference = 2 * Math.PI * averageRadius
+    const axialTurns = bundleWidth / pipeDiameter
+    const lengthPerLayer = axialTurns * averageCircumference
     totalLength = lengthPerLayer * possibleLayers
   }
 
