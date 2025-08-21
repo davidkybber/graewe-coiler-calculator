@@ -1,96 +1,176 @@
 import { describe, it, expect } from 'vitest'
-import { calculateCoilParameters, formatResult } from './calculations'
-import { CoreMaterial, WireMaterial } from '../types/CalculatorTypes'
+import { calculatePipeCoilParameters, formatResult } from './calculations'
+import { CalculationMode, CoilMethod } from '../types/CalculatorTypes'
 
-describe('calculateCoilParameters', () => {
-  const validParams = {
-    wireDiameter: 0.5,
-    numberOfTurns: 100,
-    coreDiameter: 10,
-    coreLength: 20,
-    coreMaterial: CoreMaterial.AIR,
-    wireMaterial: WireMaterial.COPPER
+describe('calculatePipeCoilParameters', () => {
+  const baseParams = {
+    pipeDiameter: 20,
+    innerDiameter: 500,
+    calculationMode: CalculationMode.COIL_LENGTH,
+    coilMethod: CoilMethod.UNEVEN_LAYERS
   }
 
-  it('should calculate parameters for valid input', async () => {
-    const result = await calculateCoilParameters(validParams)
-    
-    expect(result.success).toBe(true)
-    if (result.success) {
-      expect(result.data.inductance).toBeGreaterThan(0)
-      expect(result.data.resistance).toBeGreaterThan(0)
-      expect(result.data.wireLength).toBeGreaterThan(0)
-      expect(result.data.qualityFactor).toBeGreaterThan(0)
-      expect(result.data.selfCapacitance).toBeGreaterThan(0)
-      expect(result.data.resonantFrequency).toBeGreaterThan(0)
-    }
-  })
+  const coilLengthParams = {
+    ...baseParams,
+    outerDiameter: 800,
+    bundleWidth: 2000,
+    calculationMode: CalculationMode.COIL_LENGTH
+  }
 
-  it('should fail for invalid wire diameter', async () => {
-    const invalidParams = { ...validParams, wireDiameter: 0 }
-    const result = await calculateCoilParameters(invalidParams)
-    
-    expect(result.success).toBe(false)
-    if (!result.success) {
-      expect(result.error).toContain('Wire diameter must be greater than 0')
-    }
-  })
+  const endPositionParams = {
+    ...baseParams,
+    pipeLength: 100,
+    calculationMode: CalculationMode.END_POSITION
+  }
 
-  it('should fail for invalid number of turns', async () => {
-    const invalidParams = { ...validParams, numberOfTurns: -1 }
-    const result = await calculateCoilParameters(invalidParams)
-    
-    expect(result.success).toBe(false)
-    if (!result.success) {
-      expect(result.error).toContain('Number of turns must be a positive integer')
-    }
-  })
-
-  it('should fail when wire diameter >= core diameter', async () => {
-    const invalidParams = { ...validParams, wireDiameter: 15, coreDiameter: 10 }
-    const result = await calculateCoilParameters(invalidParams)
-    
-    expect(result.success).toBe(false)
-    if (!result.success) {
-      expect(result.error).toContain('Wire diameter must be smaller than core diameter')
-    }
-  })
-
-  it('should calculate different results for different core materials', async () => {
-    const airCoreResult = await calculateCoilParameters({
-      ...validParams,
-      coreMaterial: CoreMaterial.AIR
+  describe('Coil Length Calculation', () => {
+    it('should calculate coil length for valid parameters', async () => {
+      const result = await calculatePipeCoilParameters(coilLengthParams)
+      
+      expect(result.success).toBe(true)
+      if (result.success) {
+        expect(result.data.coilLength).toBeGreaterThan(0)
+        expect(result.data.calculationMethod).toBe(CoilMethod.UNEVEN_LAYERS)
+      }
     })
-    
-    const ironCoreResult = await calculateCoilParameters({
-      ...validParams,
-      coreMaterial: CoreMaterial.IRON
+
+    it('should fail without outer diameter for coil length calculation', async () => {
+      const invalidParams = { 
+        ...baseParams,
+        bundleWidth: 2000,
+        calculationMode: CalculationMode.COIL_LENGTH
+        // outerDiameter missing
+      }
+      
+      const result = await calculatePipeCoilParameters(invalidParams)
+      
+      expect(result.success).toBe(false)
+      if (!result.success) {
+        expect(result.error).toContain('Outer diameter must be greater than inner diameter')
+      }
     })
-    
-    expect(airCoreResult.success).toBe(true)
-    expect(ironCoreResult.success).toBe(true)
-    
-    if (airCoreResult.success && ironCoreResult.success) {
-      expect(ironCoreResult.data.inductance).toBeGreaterThan(airCoreResult.data.inductance)
-    }
+
+    it('should fail without bundle width for coil length calculation', async () => {
+      const invalidParams = { 
+        ...baseParams,
+        outerDiameter: 800,
+        calculationMode: CalculationMode.COIL_LENGTH
+        // bundleWidth missing
+      }
+      
+      const result = await calculatePipeCoilParameters(invalidParams)
+      
+      expect(result.success).toBe(false)
+      if (!result.success) {
+        expect(result.error).toContain('Bundle width must be specified')
+      }
+    })
+  })
+
+  describe('End Position Calculation', () => {
+    it('should calculate end position for valid parameters', async () => {
+      const result = await calculatePipeCoilParameters(endPositionParams)
+      
+      expect(result.success).toBe(true)
+      if (result.success) {
+        expect(result.data.endPosition).toBeDefined()
+        expect(result.data.endPosition!.outerDiameter).toBeGreaterThan(endPositionParams.innerDiameter)
+        expect(result.data.endPosition!.bundleWidth).toBeGreaterThan(0)
+        expect(result.data.endPosition!.bundleHeight).toBeGreaterThan(0)
+        expect(result.data.calculationMethod).toBe(CoilMethod.UNEVEN_LAYERS)
+      }
+    })
+
+    it('should fail without pipe length for end position calculation', async () => {
+      const invalidParams = { 
+        ...baseParams,
+        calculationMode: CalculationMode.END_POSITION
+        // pipeLength missing
+      }
+      
+      const result = await calculatePipeCoilParameters(invalidParams)
+      
+      expect(result.success).toBe(false)
+      if (!result.success) {
+        expect(result.error).toContain('Pipe length must be specified')
+      }
+    })
+  })
+
+  describe('Parameter Validation', () => {
+    it('should fail when pipe diameter >= inner diameter', async () => {
+      const invalidParams = { ...coilLengthParams, pipeDiameter: 600 }
+      const result = await calculatePipeCoilParameters(invalidParams)
+      
+      expect(result.success).toBe(false)
+      if (!result.success) {
+        expect(result.error).toContain('Pipe diameter must be smaller than inner diameter')
+      }
+    })
+
+    it('should fail for zero pipe diameter', async () => {
+      const invalidParams = { ...coilLengthParams, pipeDiameter: 0 }
+      const result = await calculatePipeCoilParameters(invalidParams)
+      
+      expect(result.success).toBe(false)
+      if (!result.success) {
+        expect(result.error).toContain('Pipe diameter must be greater than 0')
+      }
+    })
+
+    it('should fail for zero inner diameter', async () => {
+      const invalidParams = { ...coilLengthParams, innerDiameter: 0 }
+      const result = await calculatePipeCoilParameters(invalidParams)
+      
+      expect(result.success).toBe(false)
+      if (!result.success) {
+        expect(result.error).toContain('Inner diameter must be greater than 0')
+      }
+    })
+  })
+
+  describe('Different Coil Methods', () => {
+    it('should calculate results for uneven layers method', async () => {
+      const unevenParams = { ...coilLengthParams, coilMethod: CoilMethod.UNEVEN_LAYERS }
+      const result = await calculatePipeCoilParameters(unevenParams)
+      
+      expect(result.success).toBe(true)
+      if (result.success) {
+        expect(result.data.calculationMethod).toBe(CoilMethod.UNEVEN_LAYERS)
+      }
+    })
+
+    it('should calculate results for even layers offset method', async () => {
+      const evenParams = { ...coilLengthParams, coilMethod: CoilMethod.EVEN_LAYERS_OFFSET }
+      const result = await calculatePipeCoilParameters(evenParams)
+      
+      expect(result.success).toBe(true)
+      if (result.success) {
+        expect(result.data.calculationMethod).toBe(CoilMethod.EVEN_LAYERS_OFFSET)
+      }
+    })
   })
 })
 
 describe('formatResult', () => {
   it('should format regular numbers correctly', () => {
-    expect(formatResult(123.456, 'Ω', 3)).toBe('123 Ω')
+    expect(formatResult(123.456, 'mm', 2)).toBe('123,46 mm')
   })
 
-  it('should use scientific notation for very small numbers', () => {
-    expect(formatResult(0.000001, 'F', 3)).toBe('1.00e-6 F')
+  it('should format small numbers with more precision', () => {
+    expect(formatResult(0.005, 'm', 3)).toBe('0,005 m')
   })
 
-  it('should use scientific notation for very large numbers', () => {
-    expect(formatResult(1000000, 'Hz', 3)).toBe('1.00e+6 Hz')
+  it('should format large numbers with locale formatting', () => {
+    expect(formatResult(1234567, 'mm', 0)).toBe('1.234.567 mm')
   })
 
   it('should handle invalid numbers', () => {
-    expect(formatResult(NaN, 'Ω')).toBe('Invalid')
-    expect(formatResult(Infinity, 'H')).toBe('Invalid')
+    expect(formatResult(NaN, 'mm')).toBe('Invalid')
+    expect(formatResult(Infinity, 'm')).toBe('Invalid')
+  })
+
+  it('should format very small numbers with fixed precision', () => {
+    expect(formatResult(0.0001, 'm', 4)).toBe('0,0001 m')
   })
 })

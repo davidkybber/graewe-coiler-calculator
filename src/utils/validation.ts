@@ -1,69 +1,138 @@
 /**
- * Validation utilities for form inputs
+ * Validation utilities for pipe coil calculator form inputs
  */
 
-import { ValidationErrors, ValidationSchema, CoilCalculationParams } from '../types/CalculatorTypes'
+import { ValidationErrors, ValidationSchema, PipeCoilCalculationParams, CalculationMode } from '../types/CalculatorTypes'
 
-// Validation schema for calculator inputs
-export const calculatorValidationSchema: ValidationSchema = {
-  wireDiameter: {
+// Validation schema for pipe coil calculator inputs
+export const pipeCoilValidationSchema: ValidationSchema = {
+  pipeDiameter: {
     required: true,
-    min: 0.01,
-    max: 50,
-    step: 0.01,
-    message: 'Wire diameter must be between 0.01 and 50 mm'
+    min: 0.1,
+    max: 500,
+    step: 0.1,
+    message: 'Rohrdurchmesser muss zwischen 0.1 und 500 mm liegen'
   },
-  numberOfTurns: {
-    required: true,
+  pipeLength: {
+    required: false, // Required only for end position calculation
     min: 1,
     max: 10000,
     step: 1,
-    message: 'Number of turns must be between 1 and 10000'
+    message: 'Länge muss zwischen 1 und 10000 m liegen'
   },
-  coreDiameter: {
+  innerDiameter: {
     required: true,
-    min: 0.1,
+    min: 1,
+    max: 5000,
+    step: 1,
+    message: 'Innendurchmesser muss zwischen 1 und 5000 mm liegen'
+  },
+  outerDiameter: {
+    required: false, // Required only for coil length calculation
+    min: 1,
+    max: 5000,
+    step: 1,
+    message: 'Aussendurchmesser muss zwischen 1 und 5000 mm liegen'
+  },
+  bundleWidth: {
+    required: false, // Required only for coil length calculation
+    min: 1,
+    max: 10000,
+    step: 1,
+    message: 'Bundbreite muss zwischen 1 und 10000 mm liegen'
+  },
+  bundleHeight: {
+    required: false,
+    min: 1,
+    max: 5000,
+    step: 1,
+    message: 'Bundhöhe muss zwischen 1 und 5000 mm liegen'
+  },
+  pipesPerLayer: {
+    required: false,
+    min: 1,
     max: 1000,
-    step: 0.1,
-    message: 'Core diameter must be between 0.1 and 1000 mm'
+    step: 1,
+    message: 'Rohranzahl pro Lage muss zwischen 1 und 1000 liegen'
   },
-  coreLength: {
-    required: true,
-    min: 0.1,
+  numberOfLayers: {
+    required: false,
+    min: 1,
+    max: 100,
+    step: 1,
+    message: 'Lageanzahl muss zwischen 1 und 100 liegen'
+  },
+  pipesLastLayer: {
+    required: false,
+    min: 1,
     max: 1000,
-    step: 0.1,
-    message: 'Core length must be between 0.1 and 1000 mm'
+    step: 1,
+    message: 'Rohranzahl auf der letzten Lage muss zwischen 1 und 1000 liegen'
   },
-  coreMaterial: {
-    required: true,
-    message: 'Please select a core material'
+  numberOfRotations: {
+    required: false,
+    min: 1,
+    max: 1000,
+    step: 1,
+    message: 'Rotationsanzahl muss zwischen 1 und 1000 liegen'
   },
-  wireMaterial: {
+  calculationMode: {
     required: true,
-    message: 'Please select a wire material'
+    message: 'Bitte wählen Sie eine Berechnungsart'
+  },
+  coilMethod: {
+    required: true,
+    message: 'Bitte wählen Sie ein Wickelbild'
   }
 }
 
 /**
- * Validate form values against schema
+ * Validate form values against schema with dynamic requirements
  */
 export const validateForm = (
-  values: Partial<CoilCalculationParams>,
-  schema: ValidationSchema = calculatorValidationSchema
+  values: Partial<PipeCoilCalculationParams>,
+  schema: ValidationSchema = pipeCoilValidationSchema
 ): ValidationErrors => {
   const errors: ValidationErrors = {}
 
-  Object.entries(schema).forEach(([field, rule]) => {
-    const value = values[field as keyof CoilCalculationParams]
+  // Get calculation mode to determine required fields
+  const calculationMode = values.calculationMode
 
-    // Check required fields
-    if (rule.required && !value) {
-      errors[field as keyof ValidationErrors] = rule.message || `${field} is required`
+  Object.entries(schema).forEach(([field, rule]) => {
+    const value = values[field as keyof PipeCoilCalculationParams]
+    
+    // Determine if field is required based on calculation mode
+    let isRequired = rule.required
+    
+    if (calculationMode === CalculationMode.COIL_LENGTH) {
+      if (field === 'outerDiameter' || field === 'bundleWidth') {
+        isRequired = true
+      }
+      if (field === 'pipeLength') {
+        isRequired = false
+      }
+    } else if (calculationMode === CalculationMode.END_POSITION) {
+      if (field === 'pipeLength') {
+        isRequired = true
+      }
+      if (field === 'outerDiameter' || field === 'bundleWidth') {
+        isRequired = false
+      }
+    }
+
+    // Check required fields - handle different value types
+    const isEmpty = value === null || 
+                   value === undefined || 
+                   (typeof value === 'string' && value.trim() === '') ||
+                   (typeof value === 'number' && isNaN(value))
+    
+    if (isRequired && isEmpty) {
+      errors[field as keyof ValidationErrors] = `${getFieldDisplayName(field)} ist erforderlich`
       return
     }
 
     // Skip further validation if field is empty and not required
-    if (!value) {
+    if (isEmpty) {
       return
     }
 
@@ -71,17 +140,17 @@ export const validateForm = (
     if (typeof value === 'number') {
       if (rule.min !== undefined && value < rule.min) {
         errors[field as keyof ValidationErrors] = 
-          rule.message || `${field} must be at least ${rule.min}`
+          rule.message || `${getFieldDisplayName(field)} muss mindestens ${rule.min} sein`
       }
 
       if (rule.max !== undefined && value > rule.max) {
         errors[field as keyof ValidationErrors] = 
-          rule.message || `${field} must be at most ${rule.max}`
+          rule.message || `${getFieldDisplayName(field)} darf höchstens ${rule.max} sein`
       }
 
       if (isNaN(value) || !isFinite(value)) {
         errors[field as keyof ValidationErrors] = 
-          rule.message || `${field} must be a valid number`
+          `${getFieldDisplayName(field)} muss eine gültige Zahl sein`
       }
     }
 
@@ -89,15 +158,27 @@ export const validateForm = (
     if (typeof value === 'string' && rule.pattern) {
       if (!rule.pattern.test(value)) {
         errors[field as keyof ValidationErrors] = 
-          rule.message || `${field} format is invalid`
+          rule.message || `${getFieldDisplayName(field)} Format ist ungültig`
       }
     }
   })
 
   // Custom cross-field validation
-  if (values.wireDiameter && values.coreDiameter) {
-    if (values.wireDiameter >= values.coreDiameter) {
-      errors.wireDiameter = 'Wire diameter must be smaller than core diameter'
+  if (values.pipeDiameter && values.innerDiameter) {
+    if (values.pipeDiameter >= values.innerDiameter) {
+      errors.pipeDiameter = 'Rohrdurchmesser muss kleiner als der Innendurchmesser sein'
+    }
+  }
+
+  if (values.innerDiameter && values.outerDiameter) {
+    if (values.innerDiameter >= values.outerDiameter) {
+      errors.outerDiameter = 'Aussendurchmesser muss größer als der Innendurchmesser sein'
+    }
+  }
+
+  if (values.pipesLastLayer && values.pipesPerLayer) {
+    if (values.pipesLastLayer > values.pipesPerLayer) {
+      errors.pipesLastLayer = 'Rohranzahl auf der letzten Lage darf nicht größer als Rohranzahl pro Lage sein'
     }
   }
 
@@ -105,10 +186,32 @@ export const validateForm = (
 }
 
 /**
+ * Get display name for form field
+ */
+const getFieldDisplayName = (field: string): string => {
+  const displayNames: Record<string, string> = {
+    pipeDiameter: 'Rohrdurchmesser',
+    pipeLength: 'Länge',
+    innerDiameter: 'Innendurchmesser',
+    outerDiameter: 'Aussendurchmesser',
+    bundleWidth: 'Bundbreite',
+    bundleHeight: 'Bundhöhe',
+    pipesPerLayer: 'Rohranzahl pro Lage',
+    numberOfLayers: 'Lageanzahl',
+    pipesLastLayer: 'Rohranzahl auf der letzten Lage',
+    numberOfRotations: 'Rotationsanzahl',
+    calculationMode: 'Berechnungsart',
+    coilMethod: 'Wickelbild'
+  }
+  
+  return displayNames[field] || field
+}
+
+/**
  * Check if form has any validation errors
  */
 export const hasValidationErrors = (errors: ValidationErrors): boolean => {
-  return Object.keys(errors).length > 0
+  return Object.values(errors).some(error => error !== undefined && error !== '')
 }
 
 /**

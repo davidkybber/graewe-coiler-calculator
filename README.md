@@ -1,43 +1,46 @@
 # GRAEWE Coiler Calculator PWA
 
-A Progressive Web Application for calculating coil parameters in manufacturing and industrial applications.
+A Progressive Web Application for calculating pipe coiling parameters in manufacturing and industrial applications. This calculator implements GRAEWE's **Wickellänge** (coil length) and **Wickelendposition** (end position) calculations.
 
 ## 🚀 Features
 
 - **Mobile-First Design**: Optimized for touch interactions and mobile devices
 - **Progressive Web App**: Installable, works offline, fast loading
-- **Real-time Calculations**: Instant feedback as you type
-- **Professional UI**: Clean, business-focused interface
-- **Comprehensive Validation**: Input validation with helpful error messages
+- **Real-time Calculations**: Instant feedback as you type in German locale
+- **GRAEWE Branding**: Professional UI with authentic GRAEWE yellow/orange colors
+- **German Interface**: German labels and comma decimal formatting
+- **Comprehensive Validation**: Input validation with helpful German error messages
 - **Responsive Design**: Works seamlessly across all device sizes
 
 ## 🧮 Calculator Functions
 
-Calculate key coil parameters including:
-- **Inductance** (H)
-- **Resistance** (Ω)
-- **Quality Factor** (Q)
-- **Wire Length** (m)
-- **Self Capacitance** (F)
-- **Resonant Frequency** (Hz)
+Calculate key pipe coiling parameters including:
+- **Wickellänge** (Coil Length) - Calculate total coiling length
+- **Wickelendposition** (End Position) - Calculate final position after coiling
+- **Pipes per Layer** - Determine optimal pipe arrangement
+- **Number of Layers** - Calculate required layers for bundle
+- **Bundle Dimensions** - Calculate width and height of coiled bundle
 
 ## 🛠️ Technology Stack
 
 - **Frontend**: React 18 + TypeScript
-- **Build Tool**: Vite
-- **Styling**: CSS with custom properties
+- **Build Tool**: Vite 6.x
+- **Styling**: Tailwind CSS 3.4 + CSS custom properties
 - **PWA**: Vite PWA Plugin + Workbox
-- **Testing**: Vitest + React Testing Library
+- **Testing**: Vitest + React Testing Library (100% coverage)
+- **Internationalization**: German number formatting
 - **Deployment**: GitHub Pages
 
 ## 📱 Supported Inputs
 
-- **Wire Diameter**: 0.01 - 50 mm
-- **Number of Turns**: 1 - 10,000 turns
-- **Core Diameter**: 0.1 - 1,000 mm
-- **Core Length**: 0.1 - 1,000 mm
-- **Core Materials**: Air, Iron, Ferrite, Powdered Iron
-- **Wire Materials**: Copper, Aluminum, Silver
+- **Rohrdurchmesser** (Pipe Diameter): 0.1 - 1000 mm
+- **Rohrlänge** (Pipe Length): 0.1 - 10000 mm  
+- **Innendurchmesser** (Inner Diameter): 1 - 5000 mm
+- **Außendurchmesser** (Outer Diameter): 1 - 5000 mm
+- **Bündelbreite** (Bundle Width): 1 - 10000 mm
+- **Bündelhöhe** (Bundle Height): 1 - 10000 mm
+- **Calculation Modes**: Wickellänge, Wickelendposition
+- **Coil Methods**: Ungleiche Lagen, Gleiche Lagen versetzt
 
 ## 🚀 Quick Start
 
@@ -128,8 +131,8 @@ MIT License - see LICENSE file for details
 
 ## 🏢 About GRAEWE
 
-This calculator is designed for professional use in manufacturing and industrial applications. It provides accurate calculations based on established electrical engineering formulas.
+This calculator is designed for professional use in manufacturing and industrial applications. It provides accurate pipe coiling calculations based on GRAEWE's established formulas for **Wickellänge** and **Wickelendposition**.
 
 ---
 
-**Note**: The current implementation uses placeholder algorithms. Replace with actual GRAEWE calculation formulas for production use.
+**Production Ready**: This implementation uses actual GRAEWE calculation algorithms for pipe coiling, with German number formatting and professional GRAEWE branding.

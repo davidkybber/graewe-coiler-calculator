@@ -1,19 +1,26 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react'
 import { 
   CalculatorState, 
-  CalculatorAction
+  CalculatorAction,
+  CalculationMode,
+  CoilMethod
 } from '../../types/CalculatorTypes'
-import { CoreMaterial, WireMaterial } from '../../types/CalculatorTypes'
 
 // Initial state
 const initialState: CalculatorState = {
   params: {
-    wireDiameter: undefined,
-    numberOfTurns: undefined,
-    coreDiameter: undefined,
-    coreLength: undefined,
-    coreMaterial: CoreMaterial.AIR,
-    wireMaterial: WireMaterial.COPPER
+    pipeDiameter: undefined,
+    pipeLength: undefined,
+    innerDiameter: undefined,
+    outerDiameter: undefined,
+    bundleWidth: undefined,
+    bundleHeight: undefined,
+    pipesPerLayer: undefined,
+    numberOfLayers: undefined,
+    pipesLastLayer: undefined,
+    numberOfRotations: undefined,
+    calculationMode: CalculationMode.COIL_LENGTH,
+    coilMethod: CoilMethod.UNEVEN_LAYERS
   },
   result: null,
   errors: {},
