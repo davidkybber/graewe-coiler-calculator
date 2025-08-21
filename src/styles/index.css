@@ -1,0 +1,122 @@
+/* Basic CSS Reset and Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Custom CSS Variables for GRAEWE Brand */
+:root {
+  --graewe-primary: #1e40af;
+  --graewe-secondary: #3b82f6;
+  --graewe-accent: #60a5fa;
+  --graewe-dark: #1e293b;
+  --graewe-light: #f8fafc;
+  --graewe-gray-50: #f9fafb;
+  --graewe-gray-100: #f3f4f6;
+  --graewe-gray-200: #e5e7eb;
+  --graewe-gray-300: #d1d5db;
+  --graewe-gray-400: #9ca3af;
+  --graewe-gray-500: #6b7280;
+  --graewe-gray-600: #4b5563;
+  --graewe-gray-700: #374151;
+  --graewe-gray-800: #1f2937;
+  --graewe-gray-900: #111827;
+}
+
+/* Base styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--graewe-light);
+  color: var(--graewe-dark);
+  line-height: 1.6;
+}
+
+/* Touch optimization for mobile */
+button, input, select, textarea {
+  touch-action: manipulation;
+}
+
+/* Focus styles for accessibility */
+*:focus {
+  outline: 2px solid var(--graewe-accent);
+  outline-offset: 2px;
+}
+
+/* Custom button styles */
+.btn-primary {
+  @apply bg-graewe-primary hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 text-white font-medium rounded-lg text-sm px-5 py-2.5 transition-colors duration-200;
+}
+
+.btn-secondary {
+  @apply bg-graewe-gray-200 hover:bg-graewe-gray-300 focus:ring-4 focus:ring-graewe-gray-100 text-graewe-dark font-medium rounded-lg text-sm px-5 py-2.5 transition-colors duration-200;
+}
+
+/* Input field styles */
+.input-field {
+  @apply form-input block w-full rounded-md border-graewe-gray-300 shadow-sm focus:border-graewe-primary focus:ring-graewe-primary text-lg py-3 px-4;
+}
+
+/* Calculator specific styles */
+.calculator-container {
+  @apply max-w-md mx-auto bg-white rounded-xl shadow-lg overflow-hidden;
+}
+
+.calculator-input-group {
+  @apply space-y-4;
+}
+
+.calculator-result {
+  @apply bg-graewe-gray-50 rounded-lg p-4 border border-graewe-gray-200;
+}
+
+/* Animation classes */
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Loading spinner */
+.spinner {
+  @apply inline-block w-4 h-4 border-2 border-current border-r-transparent rounded-full animate-spin;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --graewe-primary: #000000;
+    --graewe-secondary: #333333;
+    --graewe-accent: #666666;
+  }
+}
+
+/* Dark mode support (for future implementation) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --graewe-light: #1e293b;
+    --graewe-dark: #f8fafc;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    background: white;
+    color: black;
+  }
+}
