@@ -108,18 +108,33 @@ export const CalculatorResults: React.FC = () => {
         </div>
 
         {/* Results based on calculation mode */}
-        {params.calculationMode === CalculationMode.COIL_LENGTH && data.coilLength !== undefined && (
-          <div className="bg-white rounded-lg p-6 border border-green-200">
-            <div className="text-center">
-              <h4 className="text-2xl font-bold text-graewe-dark mb-2">
+        {params.calculationMode === CalculationMode.COIL_LENGTH && data.coilLengthData && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-white rounded-lg p-6 border border-green-200 text-center">
+              <h4 className="text-lg font-semibold text-graewe-dark mb-2">
                 Wickellänge
               </h4>
-              <div className="text-4xl font-bold text-graewe-primary mb-2" data-testid="coil-length-result">
-                {formatResult(data.coilLength, 'm')}
+              <div className="text-2xl font-bold text-graewe-primary" data-testid="coil-length-result">
+                {formatResult(data.coilLengthData.coilLength, 'm')}
               </div>
-              <p className="text-graewe-gray-600">
-                Maximale Rohrlänge bei den gegebenen Parametern
-              </p>
+            </div>
+
+            <div className="bg-white rounded-lg p-6 border border-green-200 text-center">
+              <h4 className="text-lg font-semibold text-graewe-dark mb-2">
+                Außendurchmesser OD
+              </h4>
+              <div className="text-2xl font-bold text-graewe-primary" data-testid="coil-length-od-result">
+                {formatResult(data.coilLengthData.outerDiameter, 'mm')}
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-lg p-6 border border-green-200 text-center">
+              <h4 className="text-lg font-semibold text-graewe-dark mb-2">
+                Bundbreite W
+              </h4>
+              <div className="text-2xl font-bold text-graewe-primary" data-testid="coil-length-width-result">
+                {formatResult(data.coilLengthData.bundleWidth, 'mm')}
+              </div>
             </div>
           </div>
         )}

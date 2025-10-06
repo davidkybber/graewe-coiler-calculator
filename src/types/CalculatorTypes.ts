@@ -52,6 +52,12 @@ export interface PipeCoilCalculationParams {
 export interface PipeCoilCalculationResult {
   /** Calculated coil length in meters (Wickellänge) */
   coilLength?: number
+  /** Coil length results (Wickellänge) */
+  coilLengthData?: {
+    coilLength: number
+    outerDiameter: number
+    bundleWidth: number
+  }
   /** End position results (Wickelendposition) */
   endPosition?: {
     outerDiameter: number
