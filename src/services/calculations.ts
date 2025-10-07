@@ -345,10 +345,7 @@ const validateCalculationParams = (
 
 /**
  * Format a number for display with appropriate precision using German locale
- * Matches GRAEWE's display precision:
- * - Values < 10: 3 decimal places
- * - Values >= 10: 2 decimal places
- * - Very small values (< 0.01): 4 decimal places
+ * Uses 1 decimal place for all values for clean, consistent display
  */
 export const formatResult = (value: number, unit: string, precision?: number): string => {
   if (isNaN(value) || !isFinite(value)) {
@@ -358,25 +355,7 @@ export const formatResult = (value: number, unit: string, precision?: number): s
   // Use German locale formatting consistently
   const formatOptions: Intl.NumberFormatOptions = {
     minimumFractionDigits: 0,
-    maximumFractionDigits: 2  // Default
-  }
-
-  // Determine precision based on value magnitude (matching GRAEWE's behavior)
-  if (precision !== undefined) {
-    // Explicit precision provided
-    formatOptions.maximumFractionDigits = precision
-  } else if (value < 0.01) {
-    // Very small values: 4 decimals
-    formatOptions.maximumFractionDigits = 4
-  } else if (value < 10) {
-    // Small values (< 10): 3 decimals (like GRAEWE shows 2.208, 1.987)
-    formatOptions.maximumFractionDigits = 3
-  } else if (value < 100) {
-    // Medium values: 3 decimals
-    formatOptions.maximumFractionDigits = 3
-  } else {
-    // Large values: 2 decimals (like GRAEWE shows 1603.425, 1595.584)
-    formatOptions.maximumFractionDigits = 3
+    maximumFractionDigits: precision !== undefined ? precision : 1
   }
 
   const formattedNumber = value.toLocaleString('de-DE', formatOptions)

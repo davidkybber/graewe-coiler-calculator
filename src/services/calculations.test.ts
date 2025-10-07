@@ -456,25 +456,25 @@ describe('GRAEWE Website Comparison Tests', () => {
 })
 
 describe('formatResult', () => {
-  it('should format small numbers with 3 decimals (matching GRAEWE)', () => {
-    expect(formatResult(2.208, 'm')).toBe('2,208 m')
-    expect(formatResult(1.987, 'm')).toBe('1,987 m')
-    expect(formatResult(5.123, 'm')).toBe('5,123 m')
+  it('should format small numbers with 1 decimal', () => {
+    expect(formatResult(2.208, 'm')).toBe('2,2 m')
+    expect(formatResult(1.987, 'm')).toBe('2 m')
+    expect(formatResult(5.123, 'm')).toBe('5,1 m')
   })
 
-  it('should format medium numbers with 3 decimals', () => {
-    expect(formatResult(123.456, 'm')).toBe('123,456 m')
-    expect(formatResult(99.999, 'mm')).toBe('99,999 mm')
+  it('should format medium numbers with 1 decimal', () => {
+    expect(formatResult(123.456, 'm')).toBe('123,5 m')
+    expect(formatResult(99.999, 'mm')).toBe('100 mm')
   })
 
-  it('should format large numbers with 3 decimals', () => {
-    expect(formatResult(1603.425, 'm')).toBe('1.603,425 m')
-    expect(formatResult(1595.584, 'm')).toBe('1.595,584 m')
+  it('should format large numbers with 1 decimal', () => {
+    expect(formatResult(1603.425, 'm')).toBe('1.603,4 m')
+    expect(formatResult(1595.584, 'm')).toBe('1.595,6 m')
   })
 
-  it('should format very small numbers with 4 decimals', () => {
-    expect(formatResult(0.005, 'm')).toBe('0,005 m')
-    expect(formatResult(0.0001, 'm')).toBe('0,0001 m')
+  it('should format very small numbers with 1 decimal', () => {
+    expect(formatResult(0.005, 'm')).toBe('0 m')
+    expect(formatResult(0.0001, 'm')).toBe('0 m')
   })
 
   it('should handle explicit precision parameter', () => {
