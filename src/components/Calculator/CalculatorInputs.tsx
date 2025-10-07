@@ -102,7 +102,7 @@ export const CalculatorInputs: React.FC = () => {
               value={params.pipeDiameter || ''}
               onChange={(e) => handleNumberChange('pipeDiameter', e.target.value)}
               className={`input-field ${errors.pipeDiameter ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''}`}
-              placeholder="z.B. 20.0"
+              placeholder="z.B. 32"
               data-testid="pipe-diameter-input"
             />
             {errors.pipeDiameter && (
@@ -124,7 +124,7 @@ export const CalculatorInputs: React.FC = () => {
               value={params.innerDiameter || ''}
               onChange={(e) => handleNumberChange('innerDiameter', e.target.value)}
               className={`input-field ${errors.innerDiameter ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''}`}
-              placeholder="z.B. 500"
+              placeholder="z.B. 400"
               data-testid="inner-diameter-input"
             />
             {errors.innerDiameter && (
@@ -148,7 +148,7 @@ export const CalculatorInputs: React.FC = () => {
                   value={params.pipeLength || ''}
                   onChange={(e) => handleNumberChange('pipeLength', e.target.value)}
                   className={`input-field ${errors.pipeLength ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''}`}
-                  placeholder="z.B. 100"
+                  placeholder="z.B. 200"
                   data-testid="pipe-length-input"
                 />
                 {errors.pipeLength && (
@@ -169,7 +169,7 @@ export const CalculatorInputs: React.FC = () => {
                   value={params.pipesPerLayer || ''}
                   onChange={(e) => handleNumberChange('pipesPerLayer', e.target.value)}
                   className={`input-field ${errors.pipesPerLayer ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''}`}
-                  placeholder="z.B. 100"
+                  placeholder="z.B. 50"
                   data-testid="pipes-per-layer-input"
                 />
                 {errors.pipesPerLayer && (
@@ -215,7 +215,7 @@ export const CalculatorInputs: React.FC = () => {
                   value={params.bundleWidth || ''}
                   onChange={(e) => handleNumberChange('bundleWidth', e.target.value)}
                   className={`input-field ${errors.bundleWidth ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''}`}
-                  placeholder="z.B. 2000"
+                  placeholder="z.B. 1600"
                   data-testid="bundle-width-input"
                 />
                 {errors.bundleWidth && (
