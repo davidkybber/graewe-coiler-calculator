@@ -34,11 +34,20 @@ describe('Calculator Component', () => {
     expect(screen.getByRole('button', { name: /berechnen/i })).toBeInTheDocument()
   })
 
-  it('should show validation errors for required fields', () => {
+  it('should show validation errors for required fields', async () => {
+    const user = userEvent.setup()
     render(<CalculatorWithProvider />)
     
-    // Initially, pipe diameter should show error since it's required
+    // Initially, no errors should be visible before attempting to calculate
+    expect(screen.queryByText('Rohrdurchmesser ist erforderlich')).not.toBeInTheDocument()
+    
+    // Click calculate button without filling required fields
+    const calculateButton = screen.getByRole('button', { name: /berechnen/i })
+    await user.click(calculateButton)
+    
+    // Now validation errors should appear
     expect(screen.getByText('Rohrdurchmesser ist erforderlich')).toBeInTheDocument()
+    expect(screen.getByText('Innendurchmesser ist erforderlich')).toBeInTheDocument()
   })
 
   it('should reset form when reset button is clicked', async () => {

@@ -84,6 +84,7 @@ export interface CalculatorState {
   result: Result<PipeCoilCalculationResult> | null
   errors: ValidationErrors
   isCalculating: boolean
+  hasAttemptedCalculation: boolean
 }
 
 // Calculator actions
@@ -93,6 +94,7 @@ export type CalculatorAction =
   | { type: 'START_CALCULATION' }
   | { type: 'SET_RESULT'; result: Result<PipeCoilCalculationResult> }
   | { type: 'RESET_CALCULATOR' }
+  | { type: 'TRIGGER_VALIDATION' }
 
 // Validation schema
 export interface ValidationRule {

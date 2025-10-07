@@ -11,17 +11,21 @@ export const Calculator: React.FC = () => {
 
   // Validate and calculate when params change
   useEffect(() => {
-    const { params } = state
+    const { params, hasAttemptedCalculation } = state
     
     // Validate current form state
     const errors = validateForm(params)
-    dispatch({ type: 'SET_ERRORS', errors })
+    
+    // Only show errors if user has attempted to calculate
+    if (hasAttemptedCalculation) {
+      dispatch({ type: 'SET_ERRORS', errors })
+    }
 
     // If no errors and required fields are filled, calculate
     if (!hasValidationErrors(errors) && isFormComplete(params)) {
       performCalculation(params as PipeCoilCalculationParams)
     }
-  }, [state.params]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [state.params, state.hasAttemptedCalculation]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Check if form is complete based on calculation mode
   const isFormComplete = (params: Partial<PipeCoilCalculationParams>): boolean => {
@@ -115,11 +119,19 @@ export const Calculator: React.FC = () => {
           </button>
           <button
             onClick={() => {
-              if (isFormComplete(state.params) && !hasValidationErrors(state.errors)) {
+              // Mark that user has attempted calculation (to show validation errors)
+              dispatch({ type: 'TRIGGER_VALIDATION' })
+              
+              // Validate form
+              const errors = validateForm(state.params)
+              dispatch({ type: 'SET_ERRORS', errors })
+              
+              // Only calculate if form is valid
+              if (isFormComplete(state.params) && !hasValidationErrors(errors)) {
                 performCalculation(state.params as PipeCoilCalculationParams)
               }
             }}
-            disabled={state.isCalculating || !isFormComplete(state.params) || hasValidationErrors(state.errors)}
+            disabled={state.isCalculating}
             className="btn-primary flex-1 py-2.5 px-4 text-sm md:text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             type="button"
           >

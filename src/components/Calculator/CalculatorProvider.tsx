@@ -20,7 +20,8 @@ const initialState: CalculatorState = {
   },
   result: null,
   errors: {},
-  isCalculating: false
+  isCalculating: false,
+  hasAttemptedCalculation: false
 }
 
 // Reducer function
@@ -50,6 +51,7 @@ const calculatorReducer = (state: CalculatorState, action: CalculatorAction): Ca
       return {
         ...state,
         isCalculating: true,
+        hasAttemptedCalculation: true,
         result: null
       }
 
@@ -62,6 +64,12 @@ const calculatorReducer = (state: CalculatorState, action: CalculatorAction): Ca
 
     case 'RESET_CALCULATOR':
       return initialState
+
+    case 'TRIGGER_VALIDATION':
+      return {
+        ...state,
+        hasAttemptedCalculation: true
+      }
 
     default:
       return state
