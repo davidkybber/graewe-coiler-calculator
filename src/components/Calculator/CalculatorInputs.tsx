@@ -2,10 +2,12 @@ import React from 'react'
 import { useCalculator } from './CalculatorProvider'
 import { CalculationMode, CoilMethod } from '../../types/CalculatorTypes'
 import { formatNumberInput, parseNumberInput } from '../../utils/validation'
+import { useTranslation } from '../../hooks/useTranslation'
 
 export const CalculatorInputs: React.FC = () => {
   const { state, dispatch } = useCalculator()
   const { params, errors } = state
+  const { t } = useTranslation()
 
   // Handle numeric input changes
   const handleNumberChange = (field: string, value: string) => {
@@ -32,7 +34,7 @@ export const CalculatorInputs: React.FC = () => {
     <div className="space-y-6">
       {/* Calculation Mode Selection */}
       <div className="bg-graewe-gray-50 p-4 md:p-6 rounded-lg">
-        <h3 className="text-base md:text-lg font-semibold text-graewe-dark mb-3">Berechnungsart wählen</h3>
+        <h3 className="text-base md:text-lg font-semibold text-graewe-dark mb-3">{t('calculator.selectCalculationType')}</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <label className="flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-white transition-colors">
             <input
@@ -53,8 +55,8 @@ export const CalculatorInputs: React.FC = () => {
               )}
             </div>
             <div>
-              <div className="font-medium text-graewe-dark">Wickellänge</div>
-              <div className="text-sm text-graewe-gray-600">Berechnung der maximalen Rohrlänge</div>
+              <div className="font-medium text-graewe-dark">{t('calculator.coilLength')}</div>
+              <div className="text-sm text-graewe-gray-600">{t('calculator.coilLengthDescription')}</div>
             </div>
           </label>
           
@@ -77,8 +79,8 @@ export const CalculatorInputs: React.FC = () => {
               )}
             </div>
             <div>
-              <div className="font-medium text-graewe-dark">Wickelendposition</div>
-              <div className="text-sm text-graewe-gray-600">Berechnung der Endposition</div>
+              <div className="font-medium text-graewe-dark">{t('calculator.endPosition')}</div>
+              <div className="text-sm text-graewe-gray-600">{t('calculator.endPositionDescription')}</div>
             </div>
           </label>
         </div>
@@ -86,12 +88,12 @@ export const CalculatorInputs: React.FC = () => {
 
       {/* Basic Parameters */}
       <div>
-        <h3 className="text-base md:text-lg font-semibold text-graewe-dark mb-3">Grundparameter</h3>
+        <h3 className="text-base md:text-lg font-semibold text-graewe-dark mb-3">{t('calculator.basicParameters')}</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Pipe Diameter */}
           <div>
             <label htmlFor="pipeDiameter" className="block text-sm font-medium text-graewe-dark mb-2">
-              Rohrdurchmesser d [mm] *
+              {t('calculator.pipeDiameter')} *
             </label>
             <input
               id="pipeDiameter"
@@ -113,7 +115,7 @@ export const CalculatorInputs: React.FC = () => {
           {/* Inner Diameter */}
           <div>
             <label htmlFor="innerDiameter" className="block text-sm font-medium text-graewe-dark mb-2">
-              Innendurchmesser ID [mm] *
+              {t('calculator.innerDiameter')} *
             </label>
             <input
               id="innerDiameter"
@@ -137,7 +139,7 @@ export const CalculatorInputs: React.FC = () => {
             <>
               <div>
                 <label htmlFor="pipeLength" className="block text-sm font-medium text-graewe-dark mb-2">
-                  Länge L [m] *
+                  {t('calculator.pipeLength')} *
                 </label>
                 <input
                   id="pipeLength"
@@ -158,7 +160,7 @@ export const CalculatorInputs: React.FC = () => {
 
               <div>
                 <label htmlFor="pipesPerLayer" className="block text-sm font-medium text-graewe-dark mb-2">
-                  Rohranzahl pro Lage [oE] *
+                  {t('calculator.pipesPerLayer')} *
                 </label>
                 <input
                   id="pipesPerLayer"
@@ -183,7 +185,7 @@ export const CalculatorInputs: React.FC = () => {
             <>
               <div>
                 <label htmlFor="outerDiameter" className="block text-sm font-medium text-graewe-dark mb-2">
-                  Aussendurchmesser OD [mm] *
+                  {t('calculator.outerDiameter')} *
                 </label>
                 <input
                   id="outerDiameter"
@@ -204,7 +206,7 @@ export const CalculatorInputs: React.FC = () => {
 
               <div>
                 <label htmlFor="bundleWidth" className="block text-sm font-medium text-graewe-dark mb-2">
-                  Bundbreite W [mm] *
+                  {t('calculator.bundleWidth')} *
                 </label>
                 <input
                   id="bundleWidth"
@@ -229,7 +231,7 @@ export const CalculatorInputs: React.FC = () => {
 
       {/* Coiling Method */}
       <div>
-        <h3 className="text-base md:text-lg font-semibold text-graewe-dark mb-3">Wickelbild</h3>
+        <h3 className="text-base md:text-lg font-semibold text-graewe-dark mb-3">{t('calculator.coilingMethod')}</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <label className="flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-graewe-gray-50 transition-colors">
             <input
@@ -250,8 +252,8 @@ export const CalculatorInputs: React.FC = () => {
               )}
             </div>
             <div>
-              <div className="font-medium text-graewe-dark">Ungleiche Lagen</div>
-              <div className="text-sm text-graewe-gray-600">Variable Rohranzahl pro Lage</div>
+              <div className="font-medium text-graewe-dark">{t('calculator.unevenLayers')}</div>
+              <div className="text-sm text-graewe-gray-600">{t('calculator.unevenLayersDescription')}</div>
             </div>
           </label>
           
@@ -274,8 +276,8 @@ export const CalculatorInputs: React.FC = () => {
               )}
             </div>
             <div>
-              <div className="font-medium text-graewe-dark">Gleiche Lagen versetzt</div>
-              <div className="text-sm text-graewe-gray-600">Konstante Rohranzahl, versetzt</div>
+              <div className="font-medium text-graewe-dark">{t('calculator.evenLayersOffset')}</div>
+              <div className="text-sm text-graewe-gray-600">{t('calculator.evenLayersOffsetDescription')}</div>
             </div>
           </label>
         </div>

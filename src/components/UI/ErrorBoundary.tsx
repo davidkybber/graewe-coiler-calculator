@@ -1,4 +1,5 @@
 import { Component, ErrorInfo, ReactNode } from 'react'
+import { t, DEFAULT_LANGUAGE } from '../../i18n'
 
 interface Props {
   children: ReactNode
@@ -25,6 +26,12 @@ export class ErrorBoundary extends Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
+      // ErrorBoundary is a class component, so we can't use hooks
+      // We'll use the stored language or default to German
+      const storedLang = typeof window !== 'undefined' 
+        ? (localStorage.getItem('graewe-calculator-language') as any) || DEFAULT_LANGUAGE
+        : DEFAULT_LANGUAGE
+      
       return (
         <div className="min-h-screen flex items-center justify-center bg-graewe-light">
           <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-6">
@@ -44,23 +51,23 @@ export class ErrorBoundary extends Component<Props, State> {
               </svg>
             </div>
             <h2 className="text-lg font-semibold text-center text-graewe-dark mb-2">
-              Something went wrong
+              {t('errorBoundary.title', storedLang)}
             </h2>
             <p className="text-sm text-graewe-gray-600 text-center mb-4">
-              The calculator encountered an unexpected error. Please refresh the page to try again.
+              {t('errorBoundary.description', storedLang)}
             </p>
             <div className="flex justify-center">
               <button
                 onClick={() => window.location.reload()}
                 className="btn-primary"
               >
-                Refresh Page
+                {t('errorBoundary.refreshButton', storedLang)}
               </button>
             </div>
             {process.env.NODE_ENV === 'development' && this.state.error && (
               <details className="mt-4 p-2 bg-graewe-gray-50 rounded text-xs">
                 <summary className="cursor-pointer text-graewe-gray-600">
-                  Error Details (Development)
+                  {t('errorBoundary.errorDetails', storedLang)}
                 </summary>
                 <pre className="mt-2 whitespace-pre-wrap text-red-600">
                   {this.state.error.toString()}

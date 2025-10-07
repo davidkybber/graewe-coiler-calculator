@@ -208,7 +208,7 @@ describe('Parameter Validation', () => {
       
       expect(result.success).toBe(false)
       if (!result.success) {
-        expect(result.error).toContain('Outer diameter must be greater than inner diameter')
+        expect(result.error).toContain('Außendurchmesser muss größer als der Innendurchmesser sein')
       }
     })
 
@@ -223,7 +223,7 @@ describe('Parameter Validation', () => {
       
       expect(result.success).toBe(false)
       if (!result.success) {
-        expect(result.error).toContain('Bundle width must be specified')
+        expect(result.error).toContain('Bundbreite muss für die Wickellängenberechnung angegeben werden')
       }
     })
   })
@@ -241,7 +241,7 @@ describe('Parameter Validation', () => {
       
       expect(result.success).toBe(false)
       if (!result.success) {
-        expect(result.error).toContain('Pipe length must be specified')
+        expect(result.error).toContain('Länge muss für die Endpositionsberechnung angegeben werden')
       }
     })
 
@@ -257,7 +257,7 @@ describe('Parameter Validation', () => {
       
       expect(result.success).toBe(false)
       if (!result.success) {
-        expect(result.error).toContain('Pipes per layer must be specified')
+        expect(result.error).toContain('Rohranzahl pro Lage muss für die Endpositionsberechnung angegeben werden')
       }
     })
   })
@@ -274,7 +274,7 @@ describe('Parameter Validation', () => {
       
       expect(result.success).toBe(false)
       if (!result.success) {
-        expect(result.error).toContain('Pipe diameter must be smaller than inner diameter')
+        expect(result.error).toContain('Rohrdurchmesser muss kleiner als der Innendurchmesser sein')
       }
     })
 
@@ -289,7 +289,7 @@ describe('Parameter Validation', () => {
       
       expect(result.success).toBe(false)
       if (!result.success) {
-        expect(result.error).toContain('Pipe diameter must be greater than 0')
+        expect(result.error).toContain('Rohrdurchmesser muss größer als 0 sein')
       }
     })
 
@@ -304,7 +304,7 @@ describe('Parameter Validation', () => {
       
       expect(result.success).toBe(false)
       if (!result.success) {
-        expect(result.error).toContain('Inner diameter must be greater than 0')
+        expect(result.error).toContain('Innendurchmesser muss größer als 0 sein')
       }
     })
   })
@@ -504,7 +504,7 @@ describe('formatResult', () => {
   })
 
   it('should handle invalid numbers', () => {
-    expect(formatResult(NaN, 'mm')).toBe('Invalid')
-    expect(formatResult(Infinity, 'm')).toBe('Invalid')
+    expect(formatResult(NaN, 'mm')).toBe('Ungültig')
+    expect(formatResult(Infinity, 'm')).toBe('Ungültig')
   })
 })

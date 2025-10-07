@@ -92,6 +92,16 @@ This is a PWA implementation of the GRAEWE pipe coiling calculator - a business 
 - Implement proper error handling patterns
 - Document complex algorithms thoroughly
 
+### 11. Internationalization (i18n)
+- **NEVER hardcode user-facing strings** - always use translation system
+- Import translation function: `import { t } from '../i18n'` or `'../../i18n'`
+- Use `t('category.key')` for all user-facing text
+- Add new translations to ALL language files (de.ts, en.ts, etc.)
+- Keep German as primary language (de.ts defines the structure)
+- Group related translations under appropriate categories
+- Use descriptive key names (e.g., `errors.pipeDiameterGreaterThanZero`)
+- Refer to `docs/INTERNATIONALIZATION.md` for detailed guidelines
+
 ## File Naming Conventions
 
 - Components: PascalCase (`CalculatorInput.tsx`)
@@ -124,7 +134,7 @@ This is a PWA implementation of the GRAEWE pipe coiling calculator - a business 
 - Use German number formatting with `toLocaleString('de-DE')`
 - Validate all user inputs before calculation
 - Handle edge cases (division by zero, negative values)
-- Provide clear error messages in German for invalid inputs
+- Provide clear error messages using i18n system: `t('errors.keyName')`
 - Support real-time calculation as user types
 - Support both calculation modes and coil methods
 
@@ -162,6 +172,33 @@ This is a PWA implementation of the GRAEWE pipe coiling calculator - a business 
 7. **Document your decisions** - help future developers understand your choices
 
 ## Common Patterns to Use
+
+### For Translations
+```typescript
+// Basic usage in any file
+import { t } from '../../i18n'
+
+const errorMessage = t('errors.calculationFailed')
+const title = t('errorBoundary.title')
+
+// In React components
+export const MyComponent: React.FC = () => {
+  return (
+    <div>
+      <h1>{t('layout.headerSubtitle')}</h1>
+      <p>{t('errorBoundary.description')}</p>
+    </div>
+  )
+}
+
+// In service functions
+export function validate(value: number): string | null {
+  if (value <= 0) {
+    return t('errors.pipeDiameterGreaterThanZero')
+  }
+  return null
+}
+```
 
 ### For API Calls
 ```typescript

@@ -3,17 +3,19 @@ import { useCalculator } from './CalculatorProvider'
 import { LoadingSpinner } from '../UI/LoadingSpinner'
 import { formatResult } from '../../services/calculations'
 import { CalculationMode } from '../../types/CalculatorTypes'
+import { useTranslation } from '../../hooks/useTranslation'
 
 export const CalculatorResults: React.FC = () => {
   const { state } = useCalculator()
   const { result, isCalculating, params } = state
+  const { t } = useTranslation()
 
   if (isCalculating) {
     return (
       <div className="bg-graewe-gray-50 rounded-lg p-8 border border-graewe-gray-200">
         <div className="flex items-center justify-center">
           <LoadingSpinner size="lg" className="mr-3" />
-          <span className="text-graewe-gray-600 text-lg">Berechnung wird durchgeführt...</span>
+          <span className="text-graewe-gray-600 text-lg">{t('calculator.calculating')}</span>
         </div>
       </div>
     )
@@ -39,10 +41,10 @@ export const CalculatorResults: React.FC = () => {
             </svg>
           </div>
           <h3 className="text-lg font-medium text-graewe-gray-900 mb-2">
-            Bereit für die Berechnung
+            {t('calculator.readyToCalculate')}
           </h3>
           <p className="text-graewe-gray-500">
-            Geben Sie die erforderlichen Parameter ein, um die Berechnung zu starten
+            {t('calculator.readyToCalculateDescription')}
           </p>
         </div>
       </div>
@@ -70,7 +72,7 @@ export const CalculatorResults: React.FC = () => {
           </div>
           <div>
             <h4 className="text-lg font-medium text-red-800 mb-2">
-              Berechnungsfehler
+              {t('calculator.calculationError')}
             </h4>
             <p className="text-red-700">
               {result.error}
@@ -103,7 +105,7 @@ export const CalculatorResults: React.FC = () => {
             </svg>
           </div>
           <h3 className="text-lg font-semibold text-green-800">
-            Berechnung erfolgreich
+            {t('calculator.calculationSuccess')}
           </h3>
         </div>
 
@@ -112,7 +114,7 @@ export const CalculatorResults: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-white rounded-lg p-6 border border-green-200 text-center">
               <h4 className="text-lg font-semibold text-graewe-dark mb-2">
-                Wickellänge
+                {t('calculator.coilLengthResult')}
               </h4>
               <div className="text-2xl font-bold text-graewe-primary" data-testid="coil-length-result">
                 {formatResult(data.coilLengthData.coilLength, 'm')}
@@ -121,7 +123,7 @@ export const CalculatorResults: React.FC = () => {
 
             <div className="bg-white rounded-lg p-6 border border-green-200 text-center">
               <h4 className="text-lg font-semibold text-graewe-dark mb-2">
-                Außendurchmesser OD
+                {t('calculator.outerDiameter')}
               </h4>
               <div className="text-2xl font-bold text-graewe-primary" data-testid="coil-length-od-result">
                 {formatResult(data.coilLengthData.outerDiameter, 'mm')}
@@ -130,7 +132,7 @@ export const CalculatorResults: React.FC = () => {
             
             <div className="bg-white rounded-lg p-6 border border-green-200 text-center">
               <h4 className="text-lg font-semibold text-graewe-dark mb-2">
-                Bundbreite W
+                {t('calculator.bundleWidth')}
               </h4>
               <div className="text-2xl font-bold text-graewe-primary" data-testid="coil-length-width-result">
                 {formatResult(data.coilLengthData.bundleWidth, 'mm')}
@@ -143,7 +145,7 @@ export const CalculatorResults: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-white rounded-lg p-6 border border-green-200 text-center">
               <h4 className="text-sm font-medium text-graewe-gray-600 mb-2">
-                Lageanzahl i [oE]
+                {t('calculator.numberOfLayers')}
               </h4>
               <div className="text-2xl font-bold text-graewe-primary" data-testid="number-of-layers-result">
                 {formatResult(data.endPosition.numberOfLayers, '', 0)}
@@ -152,7 +154,7 @@ export const CalculatorResults: React.FC = () => {
 
             <div className="bg-white rounded-lg p-6 border border-green-200 text-center">
               <h4 className="text-sm font-medium text-graewe-gray-600 mb-2">
-                Rohranzahl auf der letzten Lage ni [oE]
+                {t('calculator.pipesOnLastLayer')}
               </h4>
               <div className="text-2xl font-bold text-graewe-primary" data-testid="pipes-last-layer-result">
                 {formatResult(data.endPosition.pipesOnLastLayer, '', 2)} / {data.endPosition.lastLayerCapacity}
@@ -161,7 +163,7 @@ export const CalculatorResults: React.FC = () => {
 
             <div className="bg-white rounded-lg p-6 border border-green-200 text-center">
               <h4 className="text-sm font-medium text-graewe-gray-600 mb-2">
-                Rotationsanzahl r [oE]
+                {t('calculator.numberOfRotations')}
               </h4>
               <div className="text-2xl font-bold text-graewe-primary" data-testid="number-of-rotations-result">
                 {formatResult(data.endPosition.numberOfRotations, '', 2)}
@@ -170,7 +172,7 @@ export const CalculatorResults: React.FC = () => {
             
             <div className="bg-white rounded-lg p-6 border border-green-200 text-center">
               <h4 className="text-sm font-medium text-graewe-gray-600 mb-2">
-                Bundbreite W [mm]
+                {t('calculator.bundleWidth')}
               </h4>
               <div className="text-2xl font-bold text-graewe-primary" data-testid="bundle-width-result">
                 {formatResult(data.endPosition.bundleWidth, 'mm', 0)}
@@ -179,7 +181,7 @@ export const CalculatorResults: React.FC = () => {
 
             <div className="bg-white rounded-lg p-6 border border-green-200 text-center">
               <h4 className="text-sm font-medium text-graewe-gray-600 mb-2">
-                Bundhöhe H [mm]
+                {t('calculator.bundleHeight')}
               </h4>
               <div className="text-2xl font-bold text-graewe-primary" data-testid="bundle-height-result">
                 {formatResult(data.endPosition.bundleHeight, 'mm', 0)}
@@ -188,7 +190,7 @@ export const CalculatorResults: React.FC = () => {
             
             <div className="bg-white rounded-lg p-6 border border-green-200 text-center">
               <h4 className="text-sm font-medium text-graewe-gray-600 mb-2">
-                Aussendurchmesser OD [mm]
+                {t('calculator.outerDiameter')}
               </h4>
               <div className="text-2xl font-bold text-graewe-primary" data-testid="outer-diameter-result">
                 {formatResult(data.endPosition.outerDiameter, 'mm', 0)}
@@ -204,9 +206,9 @@ export const CalculatorResults: React.FC = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <div className="text-sm">
-              <span className="font-medium text-graewe-dark">Wickelbild: </span>
+              <span className="font-medium text-graewe-dark">{t('calculator.coilingMethod')}: </span>
               <span className="text-graewe-primary">
-                {data.calculationMethod === 'uneven_layers' ? 'Ungleiche Lagen' : 'Gleiche Lagen versetzt'}
+                {data.calculationMethod === 'uneven_layers' ? t('calculator.unevenLayers') : t('calculator.evenLayersOffset')}
               </span>
             </div>
           </div>
@@ -220,7 +222,7 @@ export const CalculatorResults: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
               </svg>
               <div className="text-sm">
-                <span className="font-medium text-yellow-800">Hinweis: </span>
+                <span className="font-medium text-yellow-800">{t('calculator.disclaimerTitle')}: </span>
                 <span className="text-yellow-700">{data.warning}</span>
               </div>
             </div>

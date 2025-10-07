@@ -12,6 +12,7 @@ import {
   CalculationMode,
   CoilMethod
 } from '../types/CalculatorTypes'
+import { t } from '../i18n'
 
 
 /**
@@ -37,7 +38,7 @@ export const calculatePipeCoilParameters = async (
     }
 
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown calculation error'
+    const errorMessage = error instanceof Error ? error.message : t('errors.unknownCalculationError')
     return { success: false, error: errorMessage }
   }
 }
@@ -74,7 +75,7 @@ const calculateCoilLength = (
   } = params
 
   if (!pipeDiameter || !innerDiameter || !outerDiameter || !bundleWidth) {
-    return { success: false, error: 'Missing required parameters for coil length calculation' }
+    return { success: false, error: t('errors.missingParamsCoilLength') }
   }
 
   const ND = pipeDiameter
@@ -200,7 +201,7 @@ const calculateEndPosition = (
   } = params
 
   if (!pipeDiameter || !pipeLength || !innerDiameter || !pipesPerLayer) {
-    return { success: false, error: 'Missing required parameters for end position calculation' }
+    return { success: false, error: t('errors.missingParamsEndPosition') }
   }
 
   const ND = pipeDiameter
@@ -331,32 +332,32 @@ const validateCalculationParams = (
   const { pipeDiameter, innerDiameter, calculationMode } = params
 
   if (!pipeDiameter || pipeDiameter <= 0) {
-    return { success: false, error: 'Pipe diameter must be greater than 0' }
+    return { success: false, error: t('errors.pipeDiameterGreaterThanZero') }
   }
 
   if (!innerDiameter || innerDiameter <= 0) {
-    return { success: false, error: 'Inner diameter must be greater than 0' }
+    return { success: false, error: t('errors.innerDiameterGreaterThanZero') }
   }
 
   if (pipeDiameter >= innerDiameter) {
-    return { success: false, error: 'Pipe diameter must be smaller than inner diameter' }
+    return { success: false, error: t('errors.pipeDiameterSmallerThanInner') }
   }
 
   if (calculationMode === CalculationMode.COIL_LENGTH) {
     if (!params.outerDiameter || params.outerDiameter <= innerDiameter) {
-      return { success: false, error: 'Outer diameter must be greater than inner diameter for coil length calculation' }
+      return { success: false, error: t('errors.outerDiameterGreaterThanInner') }
     }
     if (!params.bundleWidth || params.bundleWidth <= 0) {
-      return { success: false, error: 'Bundle width must be specified for coil length calculation' }
+      return { success: false, error: t('errors.bundleWidthRequired') }
     }
   }
 
   if (calculationMode === CalculationMode.END_POSITION) {
     if (!params.pipeLength || params.pipeLength <= 0) {
-      return { success: false, error: 'Pipe length must be specified for end position calculation' }
+      return { success: false, error: t('errors.pipeLengthRequired') }
     }
     if (!params.pipesPerLayer || params.pipesPerLayer <= 0) {
-      return { success: false, error: 'Pipes per layer must be specified for end position calculation' }
+      return { success: false, error: t('errors.pipesPerLayerRequired') }
     }
   }
 
@@ -369,7 +370,7 @@ const validateCalculationParams = (
  */
 export const formatResult = (value: number, unit: string, precision?: number): string => {
   if (isNaN(value) || !isFinite(value)) {
-    return 'Invalid'
+    return t('errors.invalidNumber')
   }
 
   // Use German locale formatting consistently

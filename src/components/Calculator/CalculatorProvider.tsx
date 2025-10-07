@@ -5,6 +5,7 @@ import {
   CalculationMode,
   CoilMethod
 } from '../../types/CalculatorTypes'
+import { t, DEFAULT_LANGUAGE } from '../../i18n'
 
 // Initial state
 const initialState: CalculatorState = {
@@ -101,7 +102,11 @@ export const CalculatorProvider: React.FC<CalculatorProviderProps> = ({ children
 export const useCalculator = () => {
   const context = useContext(CalculatorContext)
   if (!context) {
-    throw new Error('useCalculator must be used within a CalculatorProvider')
+    // Can't use useLanguage hook here as it may not be available yet
+    const storedLang = typeof window !== 'undefined' 
+      ? (localStorage.getItem('graewe-calculator-language') as any) || DEFAULT_LANGUAGE
+      : DEFAULT_LANGUAGE
+    throw new Error(t('provider.contextError', storedLang))
   }
   return context
 }

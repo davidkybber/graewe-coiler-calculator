@@ -4,34 +4,37 @@ import userEvent from '@testing-library/user-event'
 import { describe, it, expect } from 'vitest'
 import { Calculator } from './Calculator'
 import { CalculatorProvider } from './CalculatorProvider'
+import { LanguageProvider } from '../../contexts/LanguageContext'
 
-// Helper component to provide context
+// Helper component to provide all required contexts
 const CalculatorWithProvider = () => (
-  <CalculatorProvider>
-    <Calculator />
-  </CalculatorProvider>
+  <LanguageProvider>
+    <CalculatorProvider>
+      <Calculator />
+    </CalculatorProvider>
+  </LanguageProvider>
 )
 
 describe('Calculator Component', () => {
   it('should render calculator form', () => {
     render(<CalculatorWithProvider />)
     
-    expect(screen.getByText('GRAEWE Produktrechner')).toBeInTheDocument()
-    expect(screen.getByText('Berechnung der Wickellänge und Endposition für Rohre und Profile')).toBeInTheDocument()
+    expect(screen.getByText('GRAEWE Product Calculator')).toBeInTheDocument()
+    expect(screen.getByText('Calculation of coil length and end position for pipes and profiles')).toBeInTheDocument()
   })
 
   it('should show calculation mode selection', () => {
     render(<CalculatorWithProvider />)
     
-    expect(screen.getByText('Wickellänge')).toBeInTheDocument()
-    expect(screen.getByText('Wickelendposition')).toBeInTheDocument()
+    expect(screen.getByText('Coil Length')).toBeInTheDocument()
+    expect(screen.getByText('End Position')).toBeInTheDocument()
   })
 
   it('should render action buttons', () => {
     render(<CalculatorWithProvider />)
     
-    expect(screen.getByRole('button', { name: /zurücksetzen/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /berechnen/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /reset/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /calculate/i })).toBeInTheDocument()
   })
 
   it('should show validation errors for required fields', async () => {
@@ -42,7 +45,7 @@ describe('Calculator Component', () => {
     expect(screen.queryByText('Rohrdurchmesser ist erforderlich')).not.toBeInTheDocument()
     
     // Click calculate button without filling required fields
-    const calculateButton = screen.getByRole('button', { name: /berechnen/i })
+    const calculateButton = screen.getByRole('button', { name: /calculate/i })
     await user.click(calculateButton)
     
     // Now validation errors should appear
@@ -62,7 +65,7 @@ describe('Calculator Component', () => {
     await user.type(innerDiameterInput, '500')
     
     // Reset form
-    const resetButton = screen.getByRole('button', { name: /zurücksetzen/i })
+    const resetButton = screen.getByRole('button', { name: /reset/i })
     await user.click(resetButton)
     
     // Check that inputs are cleared
@@ -73,8 +76,8 @@ describe('Calculator Component', () => {
   it('should show placeholder message when no results', () => {
     render(<CalculatorWithProvider />)
     
-    expect(screen.getByText('Bereit für die Berechnung')).toBeInTheDocument()
-    expect(screen.getByText('Geben Sie die erforderlichen Parameter ein, um die Berechnung zu starten')).toBeInTheDocument()
+    expect(screen.getByText('Ready to calculate')).toBeInTheDocument()
+    expect(screen.getByText('Enter the required parameters to start the calculation')).toBeInTheDocument()
   })
 
   it('should enable calculate button when coil length form is complete', async () => {
@@ -92,7 +95,7 @@ describe('Calculator Component', () => {
     await user.type(screen.getByTestId('bundle-width-input'), '2000')
     
     // Calculate button should be enabled (not disabled)
-    const calculateButton = screen.getByRole('button', { name: /berechnen/i })
+    const calculateButton = screen.getByRole('button', { name: /calculate/i })
     expect(calculateButton).not.toBeDisabled()
   })
 
@@ -111,7 +114,7 @@ describe('Calculator Component', () => {
     await user.type(screen.getByTestId('pipes-per-layer-input'), '100')
     
     // Calculate button should be enabled (not disabled)
-    const calculateButton = screen.getByRole('button', { name: /berechnen/i })
+    const calculateButton = screen.getByRole('button', { name: /calculate/i })
     expect(calculateButton).not.toBeDisabled()
   })
 
@@ -136,7 +139,7 @@ describe('Calculator Component', () => {
   it('should show coiling method selection', () => {
     render(<CalculatorWithProvider />)
     
-    expect(screen.getByText('Ungleiche Lagen')).toBeInTheDocument()
-    expect(screen.getByText('Gleiche Lagen versetzt')).toBeInTheDocument()
+    expect(screen.getByText('Uneven Layers')).toBeInTheDocument()
+    expect(screen.getByText('Even Layers Offset')).toBeInTheDocument()
   })
 })

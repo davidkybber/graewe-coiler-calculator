@@ -1,10 +1,14 @@
 import React from 'react'
+import { useTranslation } from '../../hooks/useTranslation'
+import { LanguageSelector } from '../UI/LanguageSelector'
 
 interface LayoutProps {
   children: React.ReactNode
 }
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const { t } = useTranslation()
+  
   return (
     <div className="min-h-screen bg-graewe-light">
       {/* Header */}
@@ -17,33 +21,36 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                   GRAEWE
                 </h1>
                 <div className="text-xs text-graewe-gray-500 -mt-0.5">
-                  Produktrechner
+                  {t('layout.productCalculator')}
                 </div>
               </div>
             </div>
-            <div className="hidden sm:flex items-center space-x-3">
-              <div className="text-right">
-                <div className="text-sm font-medium text-graewe-dark">
-                  Professional Coil Calculations
+            <div className="flex items-center space-x-4">
+              <LanguageSelector />
+              <div className="hidden sm:flex items-center space-x-3">
+                <div className="text-right">
+                  <div className="text-sm font-medium text-graewe-dark">
+                    {t('layout.headerSubtitle')}
+                  </div>
+                  <div className="text-xs text-graewe-gray-500">
+                    {t('layout.headerDescription')}
+                  </div>
                 </div>
-                <div className="text-xs text-graewe-gray-500">
-                  Wickellänge & Endposition
+                <div className="w-8 h-8 bg-graewe-accent rounded-lg flex items-center justify-center">
+                  <svg 
+                    className="w-4 h-4 text-white" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round" 
+                      strokeWidth={2} 
+                      d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 002 2z" 
+                    />
+                  </svg>
                 </div>
-              </div>
-              <div className="w-8 h-8 bg-graewe-accent rounded-lg flex items-center justify-center">
-                <svg 
-                  className="w-4 h-4 text-white" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
-                    d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 002 2z" 
-                  />
-                </svg>
               </div>
             </div>
           </div>
@@ -65,8 +72,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 GRAEWE GmbH
               </h3>
               <p className="text-sm text-graewe-gray-600 mb-4">
-                Ihr Partner für professionelle Extrusionsanlagen und 
-                Produktrechnungen in der Kunststoffverarbeitung.
+                {t('layout.companyInfo')}
               </p>
               <div className="flex space-x-4">
                 <a 
@@ -75,7 +81,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                   rel="noopener noreferrer"
                   className="text-graewe-primary hover:text-graewe-secondary transition-colors"
                 >
-                  Website besuchen
+                  {t('layout.visitWebsite')}
                 </a>
               </div>
             </div>
@@ -83,7 +89,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             {/* Quick Links */}
             <div>
               <h3 className="text-lg font-semibold text-graewe-dark mb-4">
-                Quick Links
+                {t('layout.quickLinks')}
               </h3>
               <ul className="space-y-2 text-sm">
                 <li>
@@ -93,7 +99,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     rel="noopener noreferrer"
                     className="text-graewe-gray-600 hover:text-graewe-primary transition-colors"
                   >
-                    Original Produktrechner
+                    {t('layout.originalCalculator')}
                   </a>
                 </li>
                 <li>
@@ -103,7 +109,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     rel="noopener noreferrer"
                     className="text-graewe-gray-600 hover:text-graewe-primary transition-colors"
                   >
-                    Unsere Produkte
+                    {t('layout.ourProducts')}
                   </a>
                 </li>
                 <li>
@@ -113,7 +119,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     rel="noopener noreferrer"
                     className="text-graewe-gray-600 hover:text-graewe-primary transition-colors"
                   >
-                    Kontakt
+                    {t('layout.contact')}
                   </a>
                 </li>
               </ul>
@@ -122,14 +128,13 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             {/* Calculator Info */}
             <div>
               <h3 className="text-lg font-semibold text-graewe-dark mb-4">
-                Über diesen Rechner
+                {t('layout.aboutCalculator')}
               </h3>
               <p className="text-sm text-graewe-gray-600 mb-4">
-                Progressive Web App für mobile und Desktop-Nutzung. 
-                Optimiert für professionelle Anwender in der Fertigung.
+                {t('layout.aboutDescription')}
               </p>
               <div className="text-xs text-graewe-gray-500">
-                Version 1.0.0 • PWA Ready
+                {t('layout.version')}
               </div>
             </div>
           </div>
@@ -138,7 +143,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="mt-8 pt-6 border-t border-graewe-gray-200">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <p className="text-sm text-graewe-gray-500 mb-4 md:mb-0">
-                © 2024 GRAEWE GmbH. Alle Rechte vorbehalten.
+                {t('layout.copyright')}
               </p>
               <div className="flex items-center space-x-6 text-sm">
                 <a 
@@ -147,7 +152,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                   rel="noopener noreferrer"
                   className="text-graewe-gray-500 hover:text-graewe-primary transition-colors"
                 >
-                  Impressum
+                  {t('layout.imprint')}
                 </a>
                 <a 
                   href="https://www.graewe.com/datenschutz" 
@@ -155,10 +160,10 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                   rel="noopener noreferrer"
                   className="text-graewe-gray-500 hover:text-graewe-primary transition-colors"
                 >
-                  Datenschutz
+                  {t('layout.privacy')}
                 </a>
                 <span className="text-graewe-gray-400">•</span>
-                <span className="text-graewe-gray-500">Made with ❤️ for manufacturing</span>
+                <span className="text-graewe-gray-500">{t('layout.madeWithLove')}</span>
               </div>
             </div>
           </div>

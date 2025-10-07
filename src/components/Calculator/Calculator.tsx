@@ -5,9 +5,11 @@ import { CalculatorResults } from './CalculatorResults'
 import { validateForm, hasValidationErrors } from '../../utils/validation'
 import { calculatePipeCoilParameters } from '../../services/calculations'
 import { PipeCoilCalculationParams, CalculationMode } from '../../types/CalculatorTypes'
+import { useTranslation } from '../../hooks/useTranslation'
 
 export const Calculator: React.FC = () => {
   const { state, dispatch } = useCalculator()
+  const { t } = useTranslation()
 
   // Validate and calculate when params change
   useEffect(() => {
@@ -57,7 +59,7 @@ export const Calculator: React.FC = () => {
         type: 'SET_RESULT', 
         result: { 
           success: false, 
-          error: error instanceof Error ? error.message : 'Calculation failed' 
+          error: error instanceof Error ? error.message : t('errors.calculationFailed') 
         }
       })
     }
@@ -75,10 +77,10 @@ export const Calculator: React.FC = () => {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xl md:text-2xl font-bold mb-1">
-              GRAEWE Produktrechner
+              {t('calculator.title')}
             </h2>
             <p className="text-graewe-yellow text-sm opacity-90">
-              Berechnung der Wickellänge und Endposition für Rohre und Profile
+              {t('calculator.subtitle')}
             </p>
           </div>
           <div className="hidden md:block">
@@ -115,7 +117,7 @@ export const Calculator: React.FC = () => {
             <svg className="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
-            Zurücksetzen
+            {t('calculator.reset')}
           </button>
           <button
             onClick={() => {
@@ -138,14 +140,14 @@ export const Calculator: React.FC = () => {
             {state.isCalculating ? (
               <>
                 <div className="spinner mr-2"></div>
-                Berechnung läuft...
+                {t('calculator.calculating')}
               </>
             ) : (
               <>
                 <svg className="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                 </svg>
-                Berechnen
+                {t('calculator.calculate')}
               </>
             )}
           </button>
@@ -157,8 +159,7 @@ export const Calculator: React.FC = () => {
         {/* Disclaimer */}
         <div className="mt-6 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
           <p className="text-sm text-graewe-gray-700 text-center">
-            <strong>Hinweis:</strong> Die errechneten Wickellängen können um bis zu 10% abweichen. 
-            Für die Richtigkeit der Ergebnisse übernehmen wir keine Gewähr.
+            <strong>{t('calculator.disclaimerTitle')}:</strong> {t('calculator.disclaimer')}
           </p>
         </div>
       </div>
