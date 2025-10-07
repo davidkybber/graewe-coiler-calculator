@@ -121,12 +121,14 @@ Adopt the role of a **Senior Frontend Developer** with expertise in:
 
 ### Core Functionality
 - Input fields for pipe coiling parameters:
-  - Pipe diameter (Rohrdurchmesser)
-  - Pipe length (Rohrlänge) 
-  - Inner diameter (Innendurchmesser)
-  - Outer diameter (Außendurchmesser)
-  - Bundle width (Bündelbreite)
-  - Bundle height (Bündelhöhe)
+  - Pipe diameter (Rohrdurchmesser) - always required
+  - Inner diameter (Innendurchmesser) - always required
+  - **For Wickellänge mode:**
+    - Outer diameter (Außendurchmesser)
+    - Bundle width (Bundbreite)
+  - **For Wickelendposition mode:**
+    - Pipe length (Länge L)
+    - Pipes per layer (Rohranzahl pro Lage)
 - Calculation mode selection (Wickellänge vs Wickelendposition)
 - Coil method selection (Ungleiche Lagen vs Gleiche Lagen versetzt)
 - Real-time calculation as user types
@@ -159,32 +161,52 @@ GRAEWE uses a sophisticated 3D helix model, not simple 2D circular calculations:
    - Returns sum of all layer lengths
 
 #### Wickelendposition (End Position) Calculation
+Takes pipes per layer (CPL) as **input**, calculates bundle dimensions as **output**
+
 3. **Method BB1 (Ungleiche Lagen)**
-   - Iteratively adds layers with alternating pipe counts
+   - Takes: pipe diameter, inner diameter, pipe length, pipes per layer
+   - Iteratively adds layers with alternating pipe counts (odd layers: CPL, even layers: CPL-1)
    - Uses 3D helix formula for each layer
    - Stops when accumulated length ≥ target length
-   - Returns final outer diameter and bundle dimensions
+   - Returns:
+     - Number of layers (i)
+     - Pipes on last layer (ni) with capacity ratio (ni / CPL or ni / CPL-1)
+     - Number of rotations (r)
+     - Bundle width (W = ND × CPL)
+     - Bundle height (H)
+     - Outer diameter (OD)
 
 4. **Method BB0.5 (Gleiche Lagen versetzt)**
-   - Iteratively adds layers with constant pipe count
+   - Takes: pipe diameter, inner diameter, pipe length, pipes per layer
+   - Iteratively adds layers with constant pipe count (CPL)
    - Uses 3D helix formula for each layer
    - Stops when accumulated length ≥ target length
-   - Returns final outer diameter and bundle dimensions
+   - Returns:
+     - Number of layers (i)
+     - Pipes on last layer (ni) with capacity ratio (ni / CPL)
+     - Number of rotations (r)
+     - Bundle width (W = ND × (CPL + 0.5))
+     - Bundle height (H)
+     - Outer diameter (OD)
 
 #### Implementation Details
 - **Parameter notation** (matching GRAEWE):
   - ND = pipe diameter (Rohrdurchmesser)
   - ID = inner diameter (Innendurchmesser)
   - OD = outer diameter (Außendurchmesser)
-  - W = bundle width (Bundbreite)
+  - W = bundle width (Bundbreite) - **input** for Wickellänge, **output** for Wickelendposition
   - L = pipe length (Rohrlänge)
+  - CPL = pipes per layer (Rohranzahl pro Lage) - **input** for Wickelendposition
+  - i = number of layers (Lageanzahl)
+  - ni = pipes on last layer (Rohranzahl auf der letzten Lage)
+  - r = number of rotations (Rotationsanzahl)
   - ODi = diameter at layer i
   - Ni = number of pipes in layer i
   - √3/2 ≈ 0.866 (hexagonal packing factor)
 - All calculations in `services/calculations.ts`
 - Direct port from GRAEWE's JavaScript implementation
 - **EXACT match verified**: Test results show 0 m difference from GRAEWE website
-- Comprehensive test suite (31 tests) validates all scenarios
+- Comprehensive test suite (36 tests) validates all scenarios
 - Real-world test cases from GRAEWE website included
 
 ## Deployment Strategy

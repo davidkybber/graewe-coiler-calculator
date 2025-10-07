@@ -140,31 +140,58 @@ export const CalculatorResults: React.FC = () => {
         )}
 
         {params.calculationMode === CalculationMode.END_POSITION && data.endPosition && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-white rounded-lg p-6 border border-green-200 text-center">
-              <h4 className="text-lg font-semibold text-graewe-dark mb-2">
-                Aussendurchmesser
+              <h4 className="text-sm font-medium text-graewe-gray-600 mb-2">
+                Lageanzahl i [oE]
               </h4>
-              <div className="text-2xl font-bold text-graewe-primary" data-testid="outer-diameter-result">
-                {formatResult(data.endPosition.outerDiameter, 'mm')}
+              <div className="text-2xl font-bold text-graewe-primary" data-testid="number-of-layers-result">
+                {formatResult(data.endPosition.numberOfLayers, '', 0)}
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg p-6 border border-green-200 text-center">
+              <h4 className="text-sm font-medium text-graewe-gray-600 mb-2">
+                Rohranzahl auf der letzten Lage ni [oE]
+              </h4>
+              <div className="text-2xl font-bold text-graewe-primary" data-testid="pipes-last-layer-result">
+                {formatResult(data.endPosition.pipesOnLastLayer, '', 2)} / {data.endPosition.lastLayerCapacity}
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg p-6 border border-green-200 text-center">
+              <h4 className="text-sm font-medium text-graewe-gray-600 mb-2">
+                Rotationsanzahl r [oE]
+              </h4>
+              <div className="text-2xl font-bold text-graewe-primary" data-testid="number-of-rotations-result">
+                {formatResult(data.endPosition.numberOfRotations, '', 2)}
               </div>
             </div>
             
             <div className="bg-white rounded-lg p-6 border border-green-200 text-center">
-              <h4 className="text-lg font-semibold text-graewe-dark mb-2">
-                Bundbreite
+              <h4 className="text-sm font-medium text-graewe-gray-600 mb-2">
+                Bundbreite W [mm]
               </h4>
               <div className="text-2xl font-bold text-graewe-primary" data-testid="bundle-width-result">
-                {formatResult(data.endPosition.bundleWidth, 'mm')}
+                {formatResult(data.endPosition.bundleWidth, 'mm', 0)}
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg p-6 border border-green-200 text-center">
+              <h4 className="text-sm font-medium text-graewe-gray-600 mb-2">
+                Bundhöhe H [mm]
+              </h4>
+              <div className="text-2xl font-bold text-graewe-primary" data-testid="bundle-height-result">
+                {formatResult(data.endPosition.bundleHeight, 'mm', 0)}
               </div>
             </div>
             
             <div className="bg-white rounded-lg p-6 border border-green-200 text-center">
-              <h4 className="text-lg font-semibold text-graewe-dark mb-2">
-                Bundhöhe
+              <h4 className="text-sm font-medium text-graewe-gray-600 mb-2">
+                Aussendurchmesser OD [mm]
               </h4>
-              <div className="text-2xl font-bold text-graewe-primary" data-testid="bundle-height-result">
-                {formatResult(data.endPosition.bundleHeight, 'mm')}
+              <div className="text-2xl font-bold text-graewe-primary" data-testid="outer-diameter-result">
+                {formatResult(data.endPosition.outerDiameter, 'mm', 0)}
               </div>
             </div>
           </div>

@@ -182,8 +182,11 @@ const calculateCoilLength = (
  * - ND = pipe diameter (Rohrdurchmesser)
  * - L = pipe length target (Rohrlänge)
  * - RD = inner diameter (Innendurchmesser) 
- * - CPL = pipes per layer count
+ * - CPL = pipes per layer count (Rohranzahl pro Lage)
  * - RDa = resulting outer diameter (Außendurchmesser)
+ * - i = number of layers (Lageanzahl)
+ * - ni = pipes on last layer (Rohranzahl auf der letzten Lage)
+ * - r = number of rotations (Rotationsanzahl)
  */
 const calculateEndPosition = (
   params: PipeCoilCalculationParams
@@ -192,19 +195,18 @@ const calculateEndPosition = (
     pipeDiameter,
     pipeLength,
     innerDiameter,
-    bundleWidth,
+    pipesPerLayer,
     coilMethod
   } = params
 
-  if (!pipeDiameter || !pipeLength || !innerDiameter || !bundleWidth) {
+  if (!pipeDiameter || !pipeLength || !innerDiameter || !pipesPerLayer) {
     return { success: false, error: 'Missing required parameters for end position calculation' }
   }
 
   const ND = pipeDiameter
   const L = pipeLength * 1000  // Convert meters to millimeters
   const RD = innerDiameter
-  const W = bundleWidth
-  const CPL = Math.floor(W / ND)  // Pipes per layer based on bundle width
+  const CPL = pipesPerLayer  // Pipes per layer (input parameter)
   
   let i = 1  // Layer counter
   let Lm = 0  // Accumulated pipe length
@@ -214,6 +216,7 @@ const calculateEndPosition = (
   let BB = 0  // Bundle width
   let BH = 0  // Bundle height
   let RDa = 0  // Resulting outer diameter
+  let finalNi = 0  // Final pipes on last layer
   
   const G = 1  // Safety factor (GRAEWE uses this)
 
@@ -238,6 +241,7 @@ const calculateEndPosition = (
           Lm = Lmi + Li
         } while (!((ni >= CPL) || (Lm >= (L * G))))
         
+        finalNi = ni  // Store final ni value
         Lmi = Lmi + (CPL * Math.sqrt(Math.pow(3.1415 * RDi, 2) + Math.pow(ND, 2)))
       } else {
         // Even layer: reduced count (CPL - 1)
@@ -248,6 +252,7 @@ const calculateEndPosition = (
           Lm = Lmi + Li
         } while (!((ni >= CPL - 1) || (Lm >= (L * G))))
         
+        finalNi = ni  // Store final ni value
         Lmi = Lmi + ((CPL - 1) * Math.sqrt(Math.pow(3.1415 * RDi, 2) + Math.pow(ND, 2)))
       }
       
@@ -278,6 +283,7 @@ const calculateEndPosition = (
         Lm = Lmi + Li
       } while (!((ni >= CPL) || (Lm >= (L * G))))
       
+      finalNi = ni  // Store final ni value
       Lmi = Lmi + (CPL * Math.sqrt(Math.pow(3.1415 * RDi, 2) + Math.pow(ND, 2)))
       
       if (!(Lm >= (L * G))) {
@@ -289,11 +295,25 @@ const calculateEndPosition = (
     RDa = Math.round(RD + 2 * (ND + ((i - 1) * (ND * (Math.sqrt(3) / 2)))))
   }
 
+  // Calculate last layer capacity based on method and layer number
+  let lastLayerCapacity: number
+  if (coilMethod === CoilMethod.UNEVEN_LAYERS) {
+    // BB1: Alternating - odd layers = CPL, even layers = CPL - 1
+    lastLayerCapacity = (i % 2 === 1) ? CPL : (CPL - 1)
+  } else {
+    // BB0.5: Constant capacity
+    lastLayerCapacity = CPL
+  }
+
   const result: PipeCoilCalculationResult = {
     endPosition: {
-      outerDiameter: RDa,
-      bundleWidth: BB,
-      bundleHeight: BH
+      numberOfLayers: i,
+      pipesOnLastLayer: Math.round(finalNi * 4) / 4,  // Round to nearest 0.25
+      lastLayerCapacity: lastLayerCapacity,
+      numberOfRotations: Math.round(r * 4) / 4,  // Round to nearest 0.25
+      bundleWidth: Math.round(BB),
+      bundleHeight: BH,
+      outerDiameter: RDa
     },
     calculationMethod: coilMethod,
     warning: undefined
@@ -335,8 +355,8 @@ const validateCalculationParams = (
     if (!params.pipeLength || params.pipeLength <= 0) {
       return { success: false, error: 'Pipe length must be specified for end position calculation' }
     }
-    if (!params.bundleWidth || params.bundleWidth <= 0) {
-      return { success: false, error: 'Bundle width must be specified for end position calculation' }
+    if (!params.pipesPerLayer || params.pipesPerLayer <= 0) {
+      return { success: false, error: 'Pipes per layer must be specified for end position calculation' }
     }
   }
 

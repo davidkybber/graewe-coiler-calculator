@@ -41,6 +41,13 @@ export const pipeCoilValidationSchema: ValidationSchema = {
     step: 1,
     message: 'Bundbreite muss zwischen 1 und 10000 mm liegen'
   },
+  pipesPerLayer: {
+    required: false, // Required only for end position calculation
+    min: 1,
+    max: 1000,
+    step: 1,
+    message: 'Rohranzahl pro Lage muss zwischen 1 und 1000 liegen'
+  },
   calculationMode: {
     required: true,
     message: 'Bitte wählen Sie eine Berechnungsart'
@@ -73,11 +80,11 @@ export const validateForm = (
       if (field === 'outerDiameter' || field === 'bundleWidth') {
         isRequired = true
       }
-      if (field === 'pipeLength') {
+      if (field === 'pipeLength' || field === 'pipesPerLayer') {
         isRequired = false
       }
     } else if (calculationMode === CalculationMode.END_POSITION) {
-      if (field === 'pipeLength') {
+      if (field === 'pipeLength' || field === 'pipesPerLayer') {
         isRequired = true
       }
       if (field === 'outerDiameter' || field === 'bundleWidth') {
@@ -155,6 +162,7 @@ const getFieldDisplayName = (field: string): string => {
     outerDiameter: 'Aussendurchmesser',
     bundleWidth: 'Bundbreite',
     bundleHeight: 'Bundhöhe',
+    pipesPerLayer: 'Rohranzahl pro Lage',
     calculationMode: 'Berechnungsart',
     coilMethod: 'Wickelbild'
   }

@@ -30,18 +30,10 @@ export interface PipeCoilCalculationParams {
   innerDiameter: number
   /** Outer diameter in millimeters (Aussendurchmesser OD) */
   outerDiameter?: number
-  /** Bundle width in millimeters (Bundbreite W) */
+  /** Bundle width in millimeters (Bundbreite W) - for coil length calculation */
   bundleWidth?: number
-  /** Bundle height in millimeters (Bundhöhe H) */
-  bundleHeight?: number
-  /** Number of pipes per layer (Rohranzahl pro Lage) */
+  /** Number of pipes per layer (Rohranzahl pro Lage) - for end position calculation */
   pipesPerLayer?: number
-  /** Number of layers (Lageanzahl i) */
-  numberOfLayers?: number
-  /** Number of pipes on last layer (Rohranzahl auf der letzten Lage ni) */
-  pipesLastLayer?: number
-  /** Number of rotations (Rotationsanzahl r) */
-  numberOfRotations?: number
   /** Calculation mode */
   calculationMode: CalculationMode
   /** Coiling method */
@@ -60,9 +52,13 @@ export interface PipeCoilCalculationResult {
   }
   /** End position results (Wickelendposition) */
   endPosition?: {
-    outerDiameter: number
+    numberOfLayers: number
+    pipesOnLastLayer: number
+    lastLayerCapacity: number
+    numberOfRotations: number
     bundleWidth: number
     bundleHeight: number
+    outerDiameter: number
   }
   /** Calculation method used */
   calculationMethod: CoilMethod
@@ -77,7 +73,7 @@ export interface ValidationErrors {
   innerDiameter?: string
   outerDiameter?: string
   bundleWidth?: string
-  bundleHeight?: string
+  pipesPerLayer?: string
   calculationMode?: string
   coilMethod?: string
 }

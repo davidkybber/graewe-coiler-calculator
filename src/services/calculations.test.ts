@@ -99,7 +99,7 @@ describe('GRAEWE Algorithm - End Position Calculations (Wickelendposition)', () 
       pipeDiameter: 20,
       innerDiameter: 500,
       pipeLength: 100, // meters
-      bundleWidth: 2000,
+      pipesPerLayer: 100,
       calculationMode: CalculationMode.END_POSITION,
       coilMethod: CoilMethod.UNEVEN_LAYERS
     }
@@ -109,10 +109,19 @@ describe('GRAEWE Algorithm - End Position Calculations (Wickelendposition)', () 
     expect(result.success).toBe(true)
     if (result.success) {
       expect(result.data.endPosition).toBeDefined()
+      expect(result.data.endPosition!.numberOfLayers).toBeGreaterThan(0)
+      expect(result.data.endPosition!.pipesOnLastLayer).toBeGreaterThan(0)
+      expect(result.data.endPosition!.lastLayerCapacity).toBeGreaterThan(0)
+      expect(result.data.endPosition!.numberOfRotations).toBeGreaterThan(0)
       expect(result.data.endPosition!.outerDiameter).toBeGreaterThan(params.innerDiameter)
       expect(result.data.endPosition!.bundleWidth).toBeGreaterThan(0)
       expect(result.data.endPosition!.bundleHeight).toBeGreaterThan(0)
       expect(result.data.calculationMethod).toBe(CoilMethod.UNEVEN_LAYERS)
+      
+      // BB1: Check capacity alternates based on layer number
+      const finalLayer = result.data.endPosition!.numberOfLayers
+      const expectedCapacity = (finalLayer % 2 === 1) ? params.pipesPerLayer : (params.pipesPerLayer - 1)
+      expect(result.data.endPosition!.lastLayerCapacity).toBe(expectedCapacity)
     }
   })
 
@@ -121,7 +130,7 @@ describe('GRAEWE Algorithm - End Position Calculations (Wickelendposition)', () 
       pipeDiameter: 20,
       innerDiameter: 500,
       pipeLength: 100, // meters
-      bundleWidth: 2000,
+      pipesPerLayer: 100,
       calculationMode: CalculationMode.END_POSITION,
       coilMethod: CoilMethod.EVEN_LAYERS_OFFSET
     }
@@ -131,10 +140,17 @@ describe('GRAEWE Algorithm - End Position Calculations (Wickelendposition)', () 
     expect(result.success).toBe(true)
     if (result.success) {
       expect(result.data.endPosition).toBeDefined()
+      expect(result.data.endPosition!.numberOfLayers).toBeGreaterThan(0)
+      expect(result.data.endPosition!.pipesOnLastLayer).toBeGreaterThan(0)
+      expect(result.data.endPosition!.lastLayerCapacity).toBeGreaterThan(0)
+      expect(result.data.endPosition!.numberOfRotations).toBeGreaterThan(0)
       expect(result.data.endPosition!.outerDiameter).toBeGreaterThan(params.innerDiameter)
       expect(result.data.endPosition!.bundleWidth).toBeGreaterThan(0)
       expect(result.data.endPosition!.bundleHeight).toBeGreaterThan(0)
       expect(result.data.calculationMethod).toBe(CoilMethod.EVEN_LAYERS_OFFSET)
+      
+      // BB0.5: Capacity should always equal pipesPerLayer
+      expect(result.data.endPosition!.lastLayerCapacity).toBe(params.pipesPerLayer)
     }
   })
 
@@ -143,7 +159,7 @@ describe('GRAEWE Algorithm - End Position Calculations (Wickelendposition)', () 
       pipeDiameter: 20,
       innerDiameter: 500,
       pipeLength: 100,
-      bundleWidth: 2000,
+      pipesPerLayer: 100,
       calculationMode: CalculationMode.END_POSITION
     }
 
@@ -229,19 +245,19 @@ describe('Parameter Validation', () => {
       }
     })
 
-    it('should fail without bundle width for end position', async () => {
+    it('should fail without pipes per layer for end position', async () => {
       const invalidParams = { 
         ...baseParams,
         pipeLength: 100,
         calculationMode: CalculationMode.END_POSITION
-        // bundleWidth missing
+        // pipesPerLayer missing
       }
       
       const result = await calculatePipeCoilParameters(invalidParams)
       
       expect(result.success).toBe(false)
       if (!result.success) {
-        expect(result.error).toContain('Bundle width must be specified')
+        expect(result.error).toContain('Pipes per layer must be specified')
       }
     })
   })

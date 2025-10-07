@@ -134,26 +134,49 @@ export const CalculatorInputs: React.FC = () => {
 
           {/* Conditional Fields based on calculation mode */}
           {params.calculationMode === CalculationMode.END_POSITION && (
-            <div>
-              <label htmlFor="pipeLength" className="block text-sm font-medium text-graewe-dark mb-2">
-                Länge L [m] *
-              </label>
-              <input
-                id="pipeLength"
-                type="number"
-                step="1"
-                min="1"
-                max="10000"
-                value={params.pipeLength || ''}
-                onChange={(e) => handleNumberChange('pipeLength', e.target.value)}
-                className={`input-field ${errors.pipeLength ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''}`}
-                placeholder="z.B. 100"
-                data-testid="pipe-length-input"
-              />
-              {errors.pipeLength && (
-                <p className="mt-1 text-sm text-red-600">{errors.pipeLength}</p>
-              )}
-            </div>
+            <>
+              <div>
+                <label htmlFor="pipeLength" className="block text-sm font-medium text-graewe-dark mb-2">
+                  Länge L [m] *
+                </label>
+                <input
+                  id="pipeLength"
+                  type="number"
+                  step="1"
+                  min="1"
+                  max="10000"
+                  value={params.pipeLength || ''}
+                  onChange={(e) => handleNumberChange('pipeLength', e.target.value)}
+                  className={`input-field ${errors.pipeLength ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''}`}
+                  placeholder="z.B. 100"
+                  data-testid="pipe-length-input"
+                />
+                {errors.pipeLength && (
+                  <p className="mt-1 text-sm text-red-600">{errors.pipeLength}</p>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor="pipesPerLayer" className="block text-sm font-medium text-graewe-dark mb-2">
+                  Rohranzahl pro Lage [oE] *
+                </label>
+                <input
+                  id="pipesPerLayer"
+                  type="number"
+                  step="1"
+                  min="1"
+                  max="1000"
+                  value={params.pipesPerLayer || ''}
+                  onChange={(e) => handleNumberChange('pipesPerLayer', e.target.value)}
+                  className={`input-field ${errors.pipesPerLayer ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''}`}
+                  placeholder="z.B. 100"
+                  data-testid="pipes-per-layer-input"
+                />
+                {errors.pipesPerLayer && (
+                  <p className="mt-1 text-sm text-red-600">{errors.pipesPerLayer}</p>
+                )}
+              </div>
+            </>
           )}
 
           {params.calculationMode === CalculationMode.COIL_LENGTH && (

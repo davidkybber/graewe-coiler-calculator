@@ -99,6 +99,7 @@ describe('Calculator Component', () => {
     await user.type(screen.getByTestId('pipe-diameter-input'), '20')
     await user.type(screen.getByTestId('inner-diameter-input'), '500')
     await user.type(screen.getByTestId('pipe-length-input'), '100')
+    await user.type(screen.getByTestId('pipes-per-layer-input'), '100')
     
     // Calculate button should be enabled (not disabled)
     const calculateButton = screen.getByRole('button', { name: /berechnen/i })
