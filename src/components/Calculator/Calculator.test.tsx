@@ -129,16 +129,4 @@ describe('Calculator Component', () => {
     expect(screen.getByText('Ungleiche Lagen')).toBeInTheDocument()
     expect(screen.getByText('Gleiche Lagen versetzt')).toBeInTheDocument()
   })
-
-  it('should show advanced parameters section', () => {
-    render(<CalculatorWithProvider />)
-    
-    // Advanced parameters should be in a collapsible section
-    expect(screen.getByText('Erweiterte Parameter (optional)')).toBeInTheDocument()
-    
-    // These fields should be present but optional
-    expect(screen.getByTestId('pipes-per-layer-input')).toBeInTheDocument()
-    expect(screen.getByTestId('number-of-layers-input')).toBeInTheDocument()
-    expect(screen.getByTestId('number-of-rotations-input')).toBeInTheDocument()
-  })
 })

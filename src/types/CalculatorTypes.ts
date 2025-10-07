@@ -78,10 +78,6 @@ export interface ValidationErrors {
   outerDiameter?: string
   bundleWidth?: string
   bundleHeight?: string
-  pipesPerLayer?: string
-  numberOfLayers?: string
-  pipesLastLayer?: string
-  numberOfRotations?: string
   calculationMode?: string
   coilMethod?: string
 }

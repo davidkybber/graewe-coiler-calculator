@@ -41,41 +41,6 @@ export const pipeCoilValidationSchema: ValidationSchema = {
     step: 1,
     message: 'Bundbreite muss zwischen 1 und 10000 mm liegen'
   },
-  bundleHeight: {
-    required: false,
-    min: 1,
-    max: 5000,
-    step: 1,
-    message: 'Bundhöhe muss zwischen 1 und 5000 mm liegen'
-  },
-  pipesPerLayer: {
-    required: false,
-    min: 1,
-    max: 1000,
-    step: 1,
-    message: 'Rohranzahl pro Lage muss zwischen 1 und 1000 liegen'
-  },
-  numberOfLayers: {
-    required: false,
-    min: 1,
-    max: 100,
-    step: 1,
-    message: 'Lageanzahl muss zwischen 1 und 100 liegen'
-  },
-  pipesLastLayer: {
-    required: false,
-    min: 1,
-    max: 1000,
-    step: 1,
-    message: 'Rohranzahl auf der letzten Lage muss zwischen 1 und 1000 liegen'
-  },
-  numberOfRotations: {
-    required: false,
-    min: 1,
-    max: 1000,
-    step: 1,
-    message: 'Rotationsanzahl muss zwischen 1 und 1000 liegen'
-  },
   calculationMode: {
     required: true,
     message: 'Bitte wählen Sie eine Berechnungsart'
@@ -176,12 +141,6 @@ export const validateForm = (
     }
   }
 
-  if (values.pipesLastLayer && values.pipesPerLayer) {
-    if (values.pipesLastLayer > values.pipesPerLayer) {
-      errors.pipesLastLayer = 'Rohranzahl auf der letzten Lage darf nicht größer als Rohranzahl pro Lage sein'
-    }
-  }
-
   return errors
 }
 
@@ -196,10 +155,6 @@ const getFieldDisplayName = (field: string): string => {
     outerDiameter: 'Aussendurchmesser',
     bundleWidth: 'Bundbreite',
     bundleHeight: 'Bundhöhe',
-    pipesPerLayer: 'Rohranzahl pro Lage',
-    numberOfLayers: 'Lageanzahl',
-    pipesLastLayer: 'Rohranzahl auf der letzten Lage',
-    numberOfRotations: 'Rotationsanzahl',
     calculationMode: 'Berechnungsart',
     coilMethod: 'Wickelbild'
   }

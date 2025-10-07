@@ -1,7 +1,7 @@
 ---
 description:
 globs:
-alwaysApply: false
+alwaysApply: true
 ---
 
 # GRAEWE Coiler Calculator PWA - Cursor Rules
