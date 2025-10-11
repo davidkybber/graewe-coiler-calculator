@@ -61,6 +61,28 @@ button, input, select, textarea {
   touch-action: manipulation;
   /* Prevent zoom on iOS when focused */
   font-size: max(16px, 1rem);
+  
+  /* iOS Safari fixes for text visibility */
+  color: #111827 !important; /* Force dark text color */
+  -webkit-text-fill-color: #111827 !important; /* Override iOS default */
+  -webkit-opacity: 1 !important; /* Prevent iOS opacity reduction */
+  opacity: 1 !important;
+}
+
+/* Placeholder styling with iOS overrides */
+.input-field::placeholder {
+  color: #9ca3af !important; /* graewe-gray-400 */
+  -webkit-text-fill-color: #9ca3af !important;
+  opacity: 1 !important;
+}
+
+/* iOS autofill background override */
+.input-field:-webkit-autofill,
+.input-field:-webkit-autofill:hover,
+.input-field:-webkit-autofill:focus {
+  -webkit-text-fill-color: #111827 !important;
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 /* Calculator specific styles */
