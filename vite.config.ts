@@ -8,12 +8,12 @@ export default defineConfig({
     react(),
 VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
+      includeAssets: ['favicon-32x32.png', 'apple-touch-icon.png', 'graewe-logo.jpg'],
       manifest: {
         name: 'GRAEWE Coiler Calculator',
         short_name: 'Coiler Calc',
         description: 'Professional coil calculator for manufacturing and industrial applications',
-        theme_color: '#1e40af',
+        theme_color: '#ffd600',
         background_color: '#ffffff',
         display: 'standalone',
         orientation: 'portrait',

@@ -13,7 +13,7 @@ export const CalculatorInputs: React.FC = () => {
   const handleNumberChange = (field: string, value: string) => {
     const formattedValue = formatNumberInput(value)
     const numericValue = parseNumberInput(formattedValue)
-    
+
     dispatch({
       type: 'SET_PARAM',
       field: field as any,
@@ -30,66 +30,78 @@ export const CalculatorInputs: React.FC = () => {
     })
   }
 
+  const RadioCard: React.FC<{
+    name: string
+    value: string
+    checked: boolean
+    onChange: (value: string) => void
+    title: string
+    description: string
+  }> = ({ name, value, checked, onChange, title, description }) => (
+    <label
+      className={`flex items-start p-4 rounded-lg cursor-pointer transition-all duration-200 border-2 ${
+        checked
+          ? 'border-graewe-accent bg-graewe-accent/5'
+          : 'border-graewe-gray-200 hover:border-graewe-gray-300 hover:bg-graewe-gray-50'
+      }`}
+    >
+      <input
+        type="radio"
+        name={name}
+        value={value}
+        checked={checked}
+        onChange={(e) => onChange(e.target.value)}
+        className="sr-only"
+      />
+      <div className={`w-5 h-5 rounded-full border-2 mr-3 mt-0.5 flex-shrink-0 flex items-center justify-center transition-colors ${
+        checked
+          ? 'border-graewe-accent bg-graewe-accent'
+          : 'border-graewe-gray-300'
+      }`}>
+        {checked && <div className="w-2 h-2 bg-graewe-dark rounded-full"></div>}
+      </div>
+      <div>
+        <div className="font-bold text-graewe-dark text-sm">{title}</div>
+        <div className="text-sm text-graewe-gray-500 mt-0.5">{description}</div>
+      </div>
+    </label>
+  )
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Calculation Mode Selection */}
-      <div className="bg-graewe-gray-50 p-4 md:p-6 rounded-lg">
-        <h3 className="text-base md:text-lg font-semibold text-graewe-dark mb-3">{t('calculator.selectCalculationType')}</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <label className="flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-white transition-colors">
-            <input
-              type="radio"
-              name="calculationMode"
-              value={CalculationMode.COIL_LENGTH}
-              checked={params.calculationMode === CalculationMode.COIL_LENGTH}
-              onChange={(e) => handleSelectChange('calculationMode', e.target.value)}
-              className="sr-only"
-            />
-            <div className={`w-4 h-4 rounded-full border-2 mr-3 flex items-center justify-center ${
-              params.calculationMode === CalculationMode.COIL_LENGTH 
-                ? 'border-graewe-accent bg-graewe-accent' 
-                : 'border-graewe-gray-300'
-            }`}>
-              {params.calculationMode === CalculationMode.COIL_LENGTH && (
-                <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
-              )}
-            </div>
-            <div>
-              <div className="font-medium text-graewe-dark">{t('calculator.coilLength')}</div>
-              <div className="text-sm text-graewe-gray-600">{t('calculator.coilLengthDescription')}</div>
-            </div>
-          </label>
-          
-          <label className="flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-white transition-colors">
-            <input
-              type="radio"
-              name="calculationMode"
-              value={CalculationMode.END_POSITION}
-              checked={params.calculationMode === CalculationMode.END_POSITION}
-              onChange={(e) => handleSelectChange('calculationMode', e.target.value)}
-              className="sr-only"
-            />
-            <div className={`w-4 h-4 rounded-full border-2 mr-3 flex items-center justify-center ${
-              params.calculationMode === CalculationMode.END_POSITION 
-                ? 'border-graewe-accent bg-graewe-accent' 
-                : 'border-graewe-gray-300'
-            }`}>
-              {params.calculationMode === CalculationMode.END_POSITION && (
-                <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
-              )}
-            </div>
-            <div>
-              <div className="font-medium text-graewe-dark">{t('calculator.endPosition')}</div>
-              <div className="text-sm text-graewe-gray-600">{t('calculator.endPositionDescription')}</div>
-            </div>
-          </label>
+      <div>
+        <h3 className="text-sm font-bold uppercase tracking-wider text-graewe-dark mb-1">
+          {t('calculator.selectCalculationType')}
+        </h3>
+        <span className="accent-bar mb-4"></span>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <RadioCard
+            name="calculationMode"
+            value={CalculationMode.COIL_LENGTH}
+            checked={params.calculationMode === CalculationMode.COIL_LENGTH}
+            onChange={(v) => handleSelectChange('calculationMode', v)}
+            title={t('calculator.coilLength')}
+            description={t('calculator.coilLengthDescription')}
+          />
+          <RadioCard
+            name="calculationMode"
+            value={CalculationMode.END_POSITION}
+            checked={params.calculationMode === CalculationMode.END_POSITION}
+            onChange={(v) => handleSelectChange('calculationMode', v)}
+            title={t('calculator.endPosition')}
+            description={t('calculator.endPositionDescription')}
+          />
         </div>
       </div>
 
       {/* Basic Parameters */}
       <div>
-        <h3 className="text-base md:text-lg font-semibold text-graewe-dark mb-3">{t('calculator.basicParameters')}</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <h3 className="text-sm font-bold uppercase tracking-wider text-graewe-dark mb-1">
+          {t('calculator.basicParameters')}
+        </h3>
+        <span className="accent-bar mb-4"></span>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
           {/* Pipe Diameter */}
           <div>
             <label htmlFor="pipeDiameter" className="block text-sm font-medium text-graewe-dark mb-2">
@@ -231,55 +243,27 @@ export const CalculatorInputs: React.FC = () => {
 
       {/* Coiling Method */}
       <div>
-        <h3 className="text-base md:text-lg font-semibold text-graewe-dark mb-3">{t('calculator.coilingMethod')}</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <label className="flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-graewe-gray-50 transition-colors">
-            <input
-              type="radio"
-              name="coilMethod"
-              value={CoilMethod.UNEVEN_LAYERS}
-              checked={params.coilMethod === CoilMethod.UNEVEN_LAYERS}
-              onChange={(e) => handleSelectChange('coilMethod', e.target.value)}
-              className="sr-only"
-            />
-            <div className={`w-4 h-4 rounded-full border-2 mr-3 flex items-center justify-center ${
-              params.coilMethod === CoilMethod.UNEVEN_LAYERS 
-                ? 'border-graewe-accent bg-graewe-accent' 
-                : 'border-graewe-gray-300'
-            }`}>
-              {params.coilMethod === CoilMethod.UNEVEN_LAYERS && (
-                <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
-              )}
-            </div>
-            <div>
-              <div className="font-medium text-graewe-dark">{t('calculator.unevenLayers')}</div>
-              <div className="text-sm text-graewe-gray-600">{t('calculator.unevenLayersDescription')}</div>
-            </div>
-          </label>
-          
-          <label className="flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-graewe-gray-50 transition-colors">
-            <input
-              type="radio"
-              name="coilMethod"
-              value={CoilMethod.EVEN_LAYERS_OFFSET}
-              checked={params.coilMethod === CoilMethod.EVEN_LAYERS_OFFSET}
-              onChange={(e) => handleSelectChange('coilMethod', e.target.value)}
-              className="sr-only"
-            />
-            <div className={`w-4 h-4 rounded-full border-2 mr-3 flex items-center justify-center ${
-              params.coilMethod === CoilMethod.EVEN_LAYERS_OFFSET 
-                ? 'border-graewe-accent bg-graewe-accent' 
-                : 'border-graewe-gray-300'
-            }`}>
-              {params.coilMethod === CoilMethod.EVEN_LAYERS_OFFSET && (
-                <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
-              )}
-            </div>
-            <div>
-              <div className="font-medium text-graewe-dark">{t('calculator.evenLayersOffset')}</div>
-              <div className="text-sm text-graewe-gray-600">{t('calculator.evenLayersOffsetDescription')}</div>
-            </div>
-          </label>
+        <h3 className="text-sm font-bold uppercase tracking-wider text-graewe-dark mb-1">
+          {t('calculator.coilingMethod')}
+        </h3>
+        <span className="accent-bar mb-4"></span>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <RadioCard
+            name="coilMethod"
+            value={CoilMethod.UNEVEN_LAYERS}
+            checked={params.coilMethod === CoilMethod.UNEVEN_LAYERS}
+            onChange={(v) => handleSelectChange('coilMethod', v)}
+            title={t('calculator.unevenLayers')}
+            description={t('calculator.unevenLayersDescription')}
+          />
+          <RadioCard
+            name="coilMethod"
+            value={CoilMethod.EVEN_LAYERS_OFFSET}
+            checked={params.coilMethod === CoilMethod.EVEN_LAYERS_OFFSET}
+            onChange={(v) => handleSelectChange('coilMethod', v)}
+            title={t('calculator.evenLayersOffset')}
+            description={t('calculator.evenLayersOffsetDescription')}
+          />
         </div>
       </div>
 
