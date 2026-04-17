@@ -37,9 +37,11 @@ export const CalculatorInputs: React.FC = () => {
     onChange: (value: string) => void
     title: string
     description: string
-  }> = ({ name, value, checked, onChange, title, description }) => (
+    image?: string
+    imageAlt?: string
+  }> = ({ name, value, checked, onChange, title, description, image, imageAlt }) => (
     <label
-      className={`flex items-start p-4 rounded-lg cursor-pointer transition-all duration-200 border-2 ${
+      className={`flex flex-col p-4 rounded-lg cursor-pointer transition-all duration-200 border-2 ${
         checked
           ? 'border-graewe-accent bg-graewe-accent/5'
           : 'border-graewe-gray-200 hover:border-graewe-gray-300 hover:bg-graewe-gray-50'
@@ -53,16 +55,28 @@ export const CalculatorInputs: React.FC = () => {
         onChange={(e) => onChange(e.target.value)}
         className="sr-only"
       />
-      <div className={`w-5 h-5 rounded-full border-2 mr-3 mt-0.5 flex-shrink-0 flex items-center justify-center transition-colors ${
-        checked
-          ? 'border-graewe-accent bg-graewe-accent'
-          : 'border-graewe-gray-300'
-      }`}>
-        {checked && <div className="w-2 h-2 bg-graewe-dark rounded-full"></div>}
-      </div>
-      <div>
-        <div className="font-bold text-graewe-dark text-sm">{title}</div>
-        <div className="text-sm text-graewe-gray-500 mt-0.5">{description}</div>
+      {image && (
+        <div className="flex justify-center mb-3 rounded overflow-hidden bg-white p-1">
+          <img
+            src={image}
+            alt={imageAlt || title}
+            className="max-w-full h-auto"
+            style={{ maxHeight: '200px' }}
+          />
+        </div>
+      )}
+      <div className="flex items-start">
+        <div className={`w-5 h-5 rounded-full border-2 mr-3 mt-0.5 flex-shrink-0 flex items-center justify-center transition-colors ${
+          checked
+            ? 'border-graewe-accent bg-graewe-accent'
+            : 'border-graewe-gray-300'
+        }`}>
+          {checked && <div className="w-2 h-2 bg-graewe-dark rounded-full"></div>}
+        </div>
+        <div>
+          <div className="font-bold text-graewe-dark text-sm">{title}</div>
+          <div className="text-sm text-graewe-gray-500 mt-0.5">{description}</div>
+        </div>
       </div>
     </label>
   )
@@ -255,6 +269,8 @@ export const CalculatorInputs: React.FC = () => {
             onChange={(v) => handleSelectChange('coilMethod', v)}
             title={t('calculator.unevenLayers')}
             description={t('calculator.unevenLayersDescription')}
+            image="/UGL.gif"
+            imageAlt={t('calculator.unevenLayersDiagramAlt')}
           />
           <RadioCard
             name="coilMethod"
@@ -263,6 +279,8 @@ export const CalculatorInputs: React.FC = () => {
             onChange={(v) => handleSelectChange('coilMethod', v)}
             title={t('calculator.evenLayersOffset')}
             description={t('calculator.evenLayersOffsetDescription')}
+            image="/GGL.gif"
+            imageAlt={t('calculator.evenLayersOffsetDiagramAlt')}
           />
         </div>
       </div>
