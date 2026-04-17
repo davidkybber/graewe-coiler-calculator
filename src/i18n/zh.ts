@@ -41,7 +41,22 @@ export const zh: TranslationKeys = {
     version: '版本 1.0.0 • PWA Ready',
     copyright: '© 2024 GRAEWE GmbH. 保留所有权利。',
     imprint: '版本说明',
-    privacy: '隐私'
+    privacy: '隐私',
+    company: '公司',
+    products: '产品',
+    service: '服务',
+    social: '社交媒体',
+    whoIsGraewe: 'GRAEWE是谁？',
+    whatDoesGraewe: 'GRAEWE做什么？',
+    graeweGroup: 'GRAEWE集团',
+    pipeExtrusion: '管材挤出',
+    profileExtrusion: '型材挤出',
+    sheetExtrusion: '板材挤出',
+    news: '新闻',
+    usedMachines: '二手机械',
+    downloads: '下载',
+    visitWebsiteCta: '在graewe.com上探索我们的产品系列',
+    goToWebsite: '前往网站'
   },
   provider: {
     contextError: 'useCalculator 必须在 CalculatorProvider 内使用'

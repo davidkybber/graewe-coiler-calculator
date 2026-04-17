@@ -41,7 +41,22 @@ export const es: TranslationKeys = {
     version: 'Versión 1.0.0 • PWA Ready',
     copyright: '© 2024 GRAEWE GmbH. Todos los derechos reservados.',
     imprint: 'Aviso legal',
-    privacy: 'Privacidad'
+    privacy: 'Privacidad',
+    company: 'Empresa',
+    products: 'Productos',
+    service: 'Servicio',
+    social: 'Social',
+    whoIsGraewe: '¿Quién es GRAEWE?',
+    whatDoesGraewe: '¿Qué hace GRAEWE?',
+    graeweGroup: 'El grupo GRAEWE',
+    pipeExtrusion: 'Extrusión de tubos',
+    profileExtrusion: 'Extrusión de perfiles',
+    sheetExtrusion: 'Extrusión de láminas',
+    news: 'Noticias',
+    usedMachines: 'Máquinas usadas',
+    downloads: 'Descargas',
+    visitWebsiteCta: 'Descubra nuestra gama de productos en graewe.com',
+    goToWebsite: 'Ir al sitio web'
   },
   provider: {
     contextError: 'useCalculator debe usarse dentro de un CalculatorProvider'

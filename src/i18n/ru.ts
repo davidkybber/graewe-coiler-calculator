@@ -41,7 +41,22 @@ export const ru: TranslationKeys = {
     version: 'Версия 1.0.0 • PWA Ready',
     copyright: '© 2024 GRAEWE GmbH. Все права защищены.',
     imprint: 'Выходные данные',
-    privacy: 'Конфиденциальность'
+    privacy: 'Конфиденциальность',
+    company: 'Компания',
+    products: 'Продукты',
+    service: 'Сервис',
+    social: 'Социальные сети',
+    whoIsGraewe: 'Кто такой GRAEWE?',
+    whatDoesGraewe: 'Чем занимается GRAEWE?',
+    graeweGroup: 'Группа GRAEWE',
+    pipeExtrusion: 'Экструзия труб',
+    profileExtrusion: 'Экструзия профилей',
+    sheetExtrusion: 'Экструзия листов',
+    news: 'Новости',
+    usedMachines: 'Бывшее в употреблении оборудование',
+    downloads: 'Загрузки',
+    visitWebsiteCta: 'Откройте для себя наш ассортимент продукции на graewe.com',
+    goToWebsite: 'Перейти на сайт'
   },
   provider: {
     contextError: 'useCalculator должен использоваться внутри CalculatorProvider'

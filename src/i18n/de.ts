@@ -45,7 +45,22 @@ export const de = {
     version: 'Version 1.0.0 • PWA Ready',
     copyright: '© 2024 GRAEWE GmbH. Alle Rechte vorbehalten.',
     imprint: 'Impressum',
-    privacy: 'Datenschutz'
+    privacy: 'Datenschutz',
+    company: 'Unternehmen',
+    products: 'Produkte',
+    service: 'Service',
+    social: 'Social',
+    whoIsGraewe: 'Wer ist GRAEWE?',
+    whatDoesGraewe: 'Was macht GRAEWE?',
+    graeweGroup: 'Die GRAEWE Gruppe',
+    pipeExtrusion: 'Rohrextrusion',
+    profileExtrusion: 'Profilextrusion',
+    sheetExtrusion: 'Plattenextrusion',
+    news: 'Aktuelles',
+    usedMachines: 'Gebrauchtmaschinen',
+    downloads: 'Downloads',
+    visitWebsiteCta: 'Entdecken Sie unser Produktprogramm auf graewe.com',
+    goToWebsite: 'Zur Website'
   },
 
   // Provider errors

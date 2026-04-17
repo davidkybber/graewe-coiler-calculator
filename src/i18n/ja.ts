@@ -41,7 +41,22 @@ export const ja: TranslationKeys = {
     version: 'バージョン 1.0.0 • PWA Ready',
     copyright: '© 2024 GRAEWE GmbH. 全著作権所有。',
     imprint: 'インプリント',
-    privacy: 'プライバシー'
+    privacy: 'プライバシー',
+    company: '会社',
+    products: '製品',
+    service: 'サービス',
+    social: 'ソーシャル',
+    whoIsGraewe: 'GRAEWEとは？',
+    whatDoesGraewe: 'GRAEWEは何をしているか？',
+    graeweGroup: 'GRAEWEグループ',
+    pipeExtrusion: 'パイプ押出',
+    profileExtrusion: 'プロファイル押出',
+    sheetExtrusion: 'シート押出',
+    news: 'ニュース',
+    usedMachines: '中古機械',
+    downloads: 'ダウンロード',
+    visitWebsiteCta: 'graewe.comで製品ラインナップをご覧ください',
+    goToWebsite: 'ウェブサイトへ'
   },
   provider: {
     contextError: 'useCalculatorはCalculatorProvider内で使用する必要があります'

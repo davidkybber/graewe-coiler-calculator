@@ -47,7 +47,22 @@ export const en: TranslationKeys = {
     version: 'Version 1.0.0 • PWA Ready',
     copyright: '© 2024 GRAEWE GmbH. All rights reserved.',
     imprint: 'Imprint',
-    privacy: 'Privacy'
+    privacy: 'Privacy',
+    company: 'Company',
+    products: 'Products',
+    service: 'Service',
+    social: 'Social',
+    whoIsGraewe: 'Who is GRAEWE?',
+    whatDoesGraewe: 'What does GRAEWE do?',
+    graeweGroup: 'The GRAEWE Group',
+    pipeExtrusion: 'Pipe Extrusion',
+    profileExtrusion: 'Profile Extrusion',
+    sheetExtrusion: 'Sheet Extrusion',
+    news: 'News',
+    usedMachines: 'Used Machines',
+    downloads: 'Downloads',
+    visitWebsiteCta: 'Discover our product range at graewe.com',
+    goToWebsite: 'Go to Website'
   },
 
   // Provider errors
