@@ -63,6 +63,15 @@ export const de = {
     goToWebsite: 'Zur Website'
   },
 
+  // Share configuration
+  share: {
+    button: 'Teilen',
+    title: 'Konfiguration teilen',
+    description: 'Dieser Link öffnet den Rechner mit Ihren aktuellen Werten und Ihrer Sprache.',
+    copy: 'Link kopieren',
+    copied: 'Kopiert!'
+  },
+
   // Provider errors
   provider: {
     contextError: 'useCalculator muss innerhalb eines CalculatorProviders verwendet werden'

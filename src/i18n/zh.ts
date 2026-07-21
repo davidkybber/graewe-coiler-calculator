@@ -58,6 +58,14 @@ export const zh: TranslationKeys = {
     visitWebsiteCta: '在graewe.com上探索我们的产品系列',
     goToWebsite: '前往网站'
   },
+  share: {
+    button: '分享',
+    title: '分享配置',
+    description: '此链接将使用您当前的数值和语言打开计算器。',
+    copy: '复制链接',
+    copied: '已复制！'
+  },
+
   provider: {
     contextError: 'useCalculator 必须在 CalculatorProvider 内使用'
   },

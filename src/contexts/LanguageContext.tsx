@@ -5,6 +5,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { Language, DEFAULT_LANGUAGE } from '../i18n'
+import { parseShareParams } from '../utils/shareUrl'
 
 interface LanguageContextType {
   language: Language
@@ -20,9 +21,19 @@ interface LanguageProviderProps {
 }
 
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
-  // Initialize language from localStorage or use default
+  // Initialize language with precedence: URL param > localStorage > default.
   const [language, setLanguageState] = useState<Language>(() => {
     try {
+      // A language from a shared link wins and is persisted so it "sticks"
+      // (and so the browser-detect effect below won't override it).
+      const { language: urlLanguage } = parseShareParams(
+        typeof window !== 'undefined' ? window.location.search : ''
+      )
+      if (urlLanguage) {
+        localStorage.setItem(LANGUAGE_STORAGE_KEY, urlLanguage)
+        return urlLanguage
+      }
+
       const stored = localStorage.getItem(LANGUAGE_STORAGE_KEY)
       return (stored as Language) || DEFAULT_LANGUAGE
     } catch {

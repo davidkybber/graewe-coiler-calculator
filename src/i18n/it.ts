@@ -58,6 +58,14 @@ export const it: TranslationKeys = {
     visitWebsiteCta: 'Scopri la nostra gamma di prodotti su graewe.com',
     goToWebsite: 'Vai al sito web'
   },
+  share: {
+    button: 'Condividi',
+    title: 'Condividi configurazione',
+    description: 'Questo link apre il calcolatore con i tuoi valori e la tua lingua attuali.',
+    copy: 'Copia link',
+    copied: 'Copiato!'
+  },
+
   provider: {
     contextError: 'useCalculator deve essere utilizzato all\'interno di un CalculatorProvider'
   },

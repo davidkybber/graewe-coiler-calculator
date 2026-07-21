@@ -1,6 +1,7 @@
 import React from 'react'
 import { useTranslation } from '../../hooks/useTranslation'
 import { LanguageSelector } from '../UI/LanguageSelector'
+import { ShareButton } from '../UI/ShareButton'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -24,6 +25,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             </a>
             <div className="flex items-center gap-3 md:gap-4">
               <LanguageSelector />
+              <ShareButton />
               <a
                 href="https://www.graewe.com/kontakt"
                 target="_blank"

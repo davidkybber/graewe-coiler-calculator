@@ -58,6 +58,14 @@ export const ja: TranslationKeys = {
     visitWebsiteCta: 'graewe.comで製品ラインナップをご覧ください',
     goToWebsite: 'ウェブサイトへ'
   },
+  share: {
+    button: '共有',
+    title: '設定を共有',
+    description: 'このリンクを開くと、現在の数値と言語で計算機が開きます。',
+    copy: 'リンクをコピー',
+    copied: 'コピーしました！'
+  },
+
   provider: {
     contextError: 'useCalculatorはCalculatorProvider内で使用する必要があります'
   },

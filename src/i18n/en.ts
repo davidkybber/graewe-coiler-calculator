@@ -66,6 +66,14 @@ export const en: TranslationKeys = {
   },
 
   // Provider errors
+  share: {
+    button: 'Share',
+    title: 'Share configuration',
+    description: 'This link opens the calculator with your current values and language.',
+    copy: 'Copy link',
+    copied: 'Copied!'
+  },
+
   provider: {
     contextError: 'useCalculator must be used within a CalculatorProvider'
   },

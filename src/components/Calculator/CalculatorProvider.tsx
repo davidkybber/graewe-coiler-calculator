@@ -6,6 +6,7 @@ import {
   CoilMethod
 } from '../../types/CalculatorTypes'
 import { t, DEFAULT_LANGUAGE } from '../../i18n'
+import { parseShareParams } from '../../utils/shareUrl'
 
 // Initial state
 const initialState: CalculatorState = {
@@ -88,8 +89,24 @@ interface CalculatorProviderProps {
   children: ReactNode
 }
 
+// Merge any params from a shared URL over the defaults (one-time, on load).
+const getInitialState = (): CalculatorState => {
+  if (typeof window === 'undefined') return initialState
+
+  const { params } = parseShareParams(window.location.search)
+  if (Object.keys(params).length === 0) return initialState
+
+  return {
+    ...initialState,
+    params: {
+      ...initialState.params,
+      ...params
+    }
+  }
+}
+
 export const CalculatorProvider: React.FC<CalculatorProviderProps> = ({ children }) => {
-  const [state, dispatch] = useReducer(calculatorReducer, initialState)
+  const [state, dispatch] = useReducer(calculatorReducer, initialState, getInitialState)
 
   return (
     <CalculatorContext.Provider value={{ state, dispatch }}>
