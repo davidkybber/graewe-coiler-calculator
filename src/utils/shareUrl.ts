@@ -11,10 +11,7 @@ import {
   CoilMethod,
   PipeCoilCalculationParams
 } from '../types/CalculatorTypes'
-import { Language } from '../i18n'
-
-// Supported languages — used to validate the `lang` param.
-const SUPPORTED_LANGUAGES: Language[] = ['de', 'en', 'fr', 'ru', 'es', 'it', 'zh', 'ja']
+import { Language, SUPPORTED_LANGUAGES } from '../i18n'
 
 // Numeric params ↔ short URL keys.
 const NUMBER_FIELDS: Record<string, keyof PipeCoilCalculationParams> = {

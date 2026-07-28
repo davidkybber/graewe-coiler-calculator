@@ -46,6 +46,7 @@ export const it: TranslationKeys = {
     products: 'Prodotti',
     service: 'Servizio',
     social: 'Social',
+    language: 'Lingua',
     whoIsGraewe: 'Chi è GRAEWE?',
     whatDoesGraewe: 'Cosa fa GRAEWE?',
     graeweGroup: 'Il gruppo GRAEWE',
@@ -107,5 +108,31 @@ export const it: TranslationKeys = {
     bundleHeight: 'Altezza del fascio H [mm]',
     disclaimer: 'Le lunghezze delle bobine calcolate possono variare fino al 10%. Non assumiamo alcuna responsabilità per l\'accuratezza dei risultati.',
     disclaimerTitle: 'Avviso'
+  },
+
+  seo: {
+    title: 'Calcolatore di lunghezza di avvolgimento | GRAEWE Coiler Calculator',
+    description:
+      'Calcolatore online gratuito per la lunghezza di avvolgimento e la posizione finale di avvolgimento di tubi e profili: numero di strati, tubi per strato, altezza e diametro del fascio.',
+    keywords:
+      'calcolo lunghezza di avvolgimento, posizione finale di avvolgimento, avvolgitore per tubi, larghezza del fascio, estrusione di tubi, GRAEWE',
+    heading: 'Calcolatore di lunghezza di avvolgimento per tubi',
+    aboutTitle: 'Informazioni sul calcolatore di avvolgimento GRAEWE',
+    aboutIntro:
+      'Il GRAEWE Coiler Calculator determina la lunghezza di avvolgimento e la posizione finale di avvolgimento durante l’avvolgimento di tubi e profili. Utilizza le stesse formule degli avvolgitori GRAEWE: impacchettamento esagonale degli strati con un’altezza di strato pari a d × √3/2 e la lunghezza elicoidale tridimensionale di ogni singolo strato. Tutte le misure si inseriscono in millimetri e la lunghezza di avvolgimento viene fornita in metri, direttamente nel browser, senza installazione e anche offline.',
+    faq1Question: 'Che cos’è la lunghezza di avvolgimento?',
+    faq1Answer:
+      'La lunghezza di avvolgimento è la massima lunghezza di tubo o profilo che trova posto su un fascio con un dato diametro interno (ID), diametro esterno (OD) e larghezza del fascio (W). Il calcolatore aggiunge uno strato dopo l’altro fino a raggiungere il diametro esterno e somma la lunghezza elicoidale di tutti gli strati.',
+    faq2Question: 'Che cos’è la posizione finale di avvolgimento?',
+    faq2Answer:
+      'La posizione finale indica dove termina sul fascio un tubo di lunghezza nota (L). Il calcolatore fornisce il numero di strati (i), il numero di tubi sull’ultimo strato (ni), il numero di rotazioni (r) nonché l’altezza del fascio (H) e il diametro esterno risultanti.',
+    faq3Question: 'Qual è la differenza tra strati disuguali e strati uguali sfalsati?',
+    faq3Answer:
+      'Con gli «strati disuguali» il numero di tubi per strato si alterna tra n e n−1, così che i tubi dello strato successivo si posizionano negli spazi di quello precedente. Con gli «strati uguali sfalsati» il numero di tubi per strato resta costante e gli strati sono sfalsati di mezzo diametro del tubo. Il metodo di avvolgimento influisce sia sulla larghezza utile del fascio sia sulla lunghezza di avvolgimento ottenibile.',
+    faq4Question: 'Quali dati sono necessari?',
+    faq4Answer:
+      'Per la lunghezza di avvolgimento: diametro del tubo (d), diametro interno (ID), diametro esterno (OD) e larghezza del fascio (W). Per la posizione finale: diametro del tubo (d), lunghezza (L), diametro interno (ID) e tubi per strato. I valori calcolati possono discostarsi fino al 10 %.',
+    noscript:
+      'Per il calcolo interattivo è necessario JavaScript. Attivare JavaScript nel browser.'
   }
 }

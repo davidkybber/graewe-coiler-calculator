@@ -1,32 +1,33 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { CalculatorProvider } from './components/Calculator/CalculatorProvider'
 import { Calculator } from './components/Calculator/Calculator'
+import { AboutContent } from './components/Layout/AboutContent'
 import { Layout } from './components/Layout/Layout'
 import { ErrorBoundary } from './components/UI/ErrorBoundary'
 import { LanguageProvider } from './contexts/LanguageContext'
+import { useSeoSync } from './hooks/useSeoSync'
 
-const App: React.FC = () => {
-  // The providers consume any shared-link query params during their initial
-  // render (before effects run), so it's safe to strip the query here. This
-  // keeps the address bar clean and prevents it from showing a stale config
-  // as the user edits — the Share button is the single source of fresh links.
-  useEffect(() => {
-    if (window.location.search) {
-      window.history.replaceState(null, '', import.meta.env.BASE_URL)
-    }
-  }, [])
+// Inside the language provider so document metadata (title, description,
+// canonical, JSON-LD) follows the active language.
+const AppContent: React.FC = () => {
+  useSeoSync()
 
   return (
-    <ErrorBoundary>
-      <LanguageProvider>
-        <CalculatorProvider>
-          <Layout>
-            <Calculator />
-          </Layout>
-        </CalculatorProvider>
-      </LanguageProvider>
-    </ErrorBoundary>
+    <CalculatorProvider>
+      <Layout>
+        <Calculator />
+        <AboutContent />
+      </Layout>
+    </CalculatorProvider>
   )
 }
+
+const App: React.FC = () => (
+  <ErrorBoundary>
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
+  </ErrorBoundary>
+)
 
 export default App

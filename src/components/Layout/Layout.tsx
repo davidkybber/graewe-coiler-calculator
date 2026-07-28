@@ -1,5 +1,7 @@
 import React from 'react'
 import { useTranslation } from '../../hooks/useTranslation'
+import { LANGUAGE_NAMES, SUPPORTED_LANGUAGES } from '../../i18n'
+import { languagePath } from '../../seo/siteConfig'
 import { LanguageSelector } from '../UI/LanguageSelector'
 import { ShareButton } from '../UI/ShareButton'
 
@@ -8,7 +10,7 @@ interface LayoutProps {
 }
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const { t } = useTranslation()
+  const { t, language } = useTranslation()
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -19,7 +21,9 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             <a href="https://www.graewe.com" target="_blank" rel="noopener noreferrer" className="flex-shrink-0">
               <img
                 src={`${import.meta.env.BASE_URL}graewe-logo.jpg`}
-                alt="GRAEWE"
+                alt="GRAEWE — Xtras for Extrusion"
+                width={534}
+                height={124}
                 className="h-10 md:h-14 w-auto"
               />
             </a>
@@ -42,8 +46,9 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Page Title Bar */}
       <div className="bg-graewe-dark text-white">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+          {/* Keyword-bearing H1 — the page's primary heading for search engines */}
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
-            {t('layout.productCalculator')}
+            {t('seo.heading')}
           </h1>
           <span className="accent-bar"></span>
           <p className="mt-3 text-graewe-gray-400 text-sm md:text-base max-w-2xl">
@@ -94,7 +99,10 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <div className="mb-5 inline-block rounded-md bg-white p-2">
                 <img
                   src={`${import.meta.env.BASE_URL}graewe-logo.jpg`}
-                  alt="GRAEWE"
+                  alt="GRAEWE GmbH Maschinenbau"
+                  width={534}
+                  height={124}
+                  loading="lazy"
                   className="h-auto w-[min(100%,180px)]"
                 />
               </div>
@@ -201,6 +209,33 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               </a>
             </div>
           </div>
+
+          {/* Language versions — real links so every language page is
+              crawlable and shareable, not just reachable via the switcher. */}
+          <nav
+            className="border-t border-white/10 py-5 flex flex-wrap items-center gap-x-5 gap-y-2"
+            aria-label={t('layout.language')}
+          >
+            <span className="text-xs font-bold text-graewe-gray-400 uppercase tracking-widest">
+              {t('layout.language')}
+            </span>
+            {SUPPORTED_LANGUAGES.map((code) => (
+              <a
+                key={code}
+                href={languagePath(code)}
+                hrefLang={code}
+                lang={code}
+                className={`text-xs transition-colors ${
+                  code === language
+                    ? 'text-graewe-accent font-bold'
+                    : 'text-graewe-gray-500 hover:text-graewe-gray-400'
+                }`}
+                aria-current={code === language ? 'page' : undefined}
+              >
+                {LANGUAGE_NAMES[code]}
+              </a>
+            ))}
+          </nav>
 
           {/* Bottom Bar */}
           <div className="border-t border-white/10 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">

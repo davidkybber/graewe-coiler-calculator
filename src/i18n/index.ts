@@ -23,6 +23,22 @@ import { ja } from './ja'
 // Available languages
 export type Language = 'de' | 'en' | 'fr' | 'ru' | 'es' | 'it' | 'zh' | 'ja'
 
+// Every supported language, in the order they are offered to the user.
+// Single source of truth — used for validation, hreflang and the sitemap.
+export const SUPPORTED_LANGUAGES: Language[] = ['de', 'en', 'fr', 'ru', 'es', 'it', 'zh', 'ja']
+
+// Native name of each language, for the language switcher and language links.
+export const LANGUAGE_NAMES: Record<Language, string> = {
+  de: 'Deutsch',
+  en: 'English',
+  fr: 'Français',
+  ru: 'Русский',
+  es: 'Español',
+  it: 'Italiano',
+  zh: '中文',
+  ja: '日本語'
+}
+
 // Default language for the application
 export const DEFAULT_LANGUAGE: Language = 'de'
 

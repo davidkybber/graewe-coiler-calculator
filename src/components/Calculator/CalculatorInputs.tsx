@@ -60,6 +60,10 @@ export const CalculatorInputs: React.FC = () => {
           <img
             src={image}
             alt={imageAlt || title}
+            width={260}
+            height={280}
+            loading="lazy"
+            decoding="async"
             className="max-w-full h-auto"
             style={{ maxHeight: '200px' }}
           />

@@ -4,8 +4,9 @@
  */
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-import { Language, DEFAULT_LANGUAGE } from '../i18n'
+import { Language, DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES } from '../i18n'
 import { parseShareParams } from '../utils/shareUrl'
+import { languageFromPath, languagePath } from '../seo/siteConfig'
 
 interface LanguageContextType {
   language: Language
@@ -21,17 +22,22 @@ interface LanguageProviderProps {
 }
 
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
-  // Initialize language with precedence: URL param > localStorage > default.
+  // Initialize language with precedence:
+  // share-link param > URL path (/en/) > localStorage > browser (effect below) > default.
   const [language, setLanguageState] = useState<Language>(() => {
     try {
-      // A language from a shared link wins and is persisted so it "sticks"
-      // (and so the browser-detect effect below won't override it).
+      // A language from a shared link or a language URL wins and is persisted so
+      // it "sticks" (and so the browser-detect effect below won't override it).
       const { language: urlLanguage } = parseShareParams(
         typeof window !== 'undefined' ? window.location.search : ''
       )
-      if (urlLanguage) {
-        localStorage.setItem(LANGUAGE_STORAGE_KEY, urlLanguage)
-        return urlLanguage
+      const pathLanguage =
+        typeof window !== 'undefined' ? languageFromPath(window.location.pathname) : undefined
+
+      const explicitLanguage = urlLanguage || pathLanguage
+      if (explicitLanguage) {
+        localStorage.setItem(LANGUAGE_STORAGE_KEY, explicitLanguage)
+        return explicitLanguage
       }
 
       const stored = localStorage.getItem(LANGUAGE_STORAGE_KEY)
@@ -49,6 +55,17 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
     } catch (error) {
       console.warn('Failed to save language preference:', error)
     }
+
+    // On a language page (/en/, /fr/, …) the address bar follows the switch so
+    // that URL, content and canonical stay in agreement. The adaptive root page
+    // deliberately keeps its own URL — it must remain self-canonical.
+    try {
+      if (typeof window !== 'undefined' && languageFromPath(window.location.pathname)) {
+        window.history.replaceState(null, '', languagePath(newLanguage) + window.location.hash)
+      }
+    } catch (error) {
+      console.warn('Failed to update the language URL:', error)
+    }
   }
 
   // Detect browser language on first visit
@@ -56,8 +73,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
     const stored = localStorage.getItem(LANGUAGE_STORAGE_KEY)
     if (!stored && typeof navigator !== 'undefined') {
       const browserLang = navigator.language.split('-')[0] as Language
-      const supportedLanguages: Language[] = ['de', 'en', 'fr', 'ru', 'es', 'it', 'zh', 'ja']
-      if (supportedLanguages.includes(browserLang)) {
+      if (SUPPORTED_LANGUAGES.includes(browserLang)) {
         setLanguage(browserLang)
       }
     }
@@ -81,4 +97,3 @@ export const useLanguage = (): LanguageContextType => {
   }
   return context
 }
-
