@@ -46,6 +46,7 @@ export const es: TranslationKeys = {
     products: 'Productos',
     service: 'Servicio',
     social: 'Social',
+    language: 'Idioma',
     whoIsGraewe: '¿Quién es GRAEWE?',
     whatDoesGraewe: '¿Qué hace GRAEWE?',
     graeweGroup: 'El grupo GRAEWE',
@@ -107,5 +108,31 @@ export const es: TranslationKeys = {
     bundleHeight: 'Altura del haz H [mm]',
     disclaimer: 'Las longitudes de bobina calculadas pueden variar hasta un 10%. No asumimos ninguna responsabilidad por la exactitud de los resultados.',
     disclaimerTitle: 'Aviso'
+  },
+
+  seo: {
+    title: 'Calculadora de longitud de bobinado | GRAEWE Coiler Calculator',
+    description:
+      'Calculadora en línea gratuita de la longitud de bobinado y la posición final de bobinado de tubos y perfiles: número de capas, tubos por capa, altura del haz y diámetro exterior.',
+    keywords:
+      'calcular longitud de bobinado, posición final de bobinado, bobinadora de tubos, ancho del haz, extrusión de tubos, GRAEWE',
+    heading: 'Calculadora de longitud de bobinado para tubos',
+    aboutTitle: 'Acerca de la calculadora de bobinado GRAEWE',
+    aboutIntro:
+      'El GRAEWE Coiler Calculator determina la longitud de bobinado y la posición final de bobinado al enrollar tubos y perfiles. Utiliza las mismas fórmulas que las bobinadoras de GRAEWE: empaquetado hexagonal de las capas con una altura de capa de d × √3/2 y la longitud helicoidal tridimensional de cada capa. Todas las medidas se introducen en milímetros y la longitud de bobinado se obtiene en metros, directamente en el navegador, sin instalación y también sin conexión.',
+    faq1Question: '¿Qué es la longitud de bobinado?',
+    faq1Answer:
+      'La longitud de bobinado es la longitud máxima de tubo o perfil que cabe en un haz para un diámetro interior (ID), un diámetro exterior (OD) y un ancho de haz (W) determinados. La calculadora añade capa tras capa hasta alcanzar el diámetro exterior y suma la longitud helicoidal de todas las capas.',
+    faq2Question: '¿Qué es la posición final de bobinado?',
+    faq2Answer:
+      'La posición final describe dónde termina un tubo de longitud conocida (L) sobre el haz. La calculadora proporciona el número de capas (i), el número de tubos en la última capa (ni), el número de rotaciones (r), así como la altura del haz (H) y el diámetro exterior resultantes.',
+    faq3Question: '¿Qué diferencia hay entre capas desiguales y capas iguales desplazadas?',
+    faq3Answer:
+      'Con «capas desiguales», el número de tubos por capa alterna entre n y n−1, de modo que los tubos de la capa siguiente se apoyan en los huecos de la anterior. Con «capas iguales desplazadas», el número de tubos por capa se mantiene constante y las capas se desplazan medio diámetro de tubo. El método de bobinado influye tanto en el ancho útil del haz como en la longitud de bobinado alcanzable.',
+    faq4Question: '¿Qué datos se necesitan?',
+    faq4Answer:
+      'Para la longitud de bobinado: diámetro del tubo (d), diámetro interior (ID), diámetro exterior (OD) y ancho del haz (W). Para la posición final: diámetro del tubo (d), longitud (L), diámetro interior (ID) y tubos por capa. Los valores calculados pueden variar hasta un 10 %.',
+    noscript:
+      'Se necesita JavaScript para el cálculo interactivo. Active JavaScript en su navegador.'
   }
 }

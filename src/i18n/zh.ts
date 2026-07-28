@@ -46,6 +46,7 @@ export const zh: TranslationKeys = {
     products: '产品',
     service: '服务',
     social: '社交媒体',
+    language: '语言',
     whoIsGraewe: 'GRAEWE是谁？',
     whatDoesGraewe: 'GRAEWE做什么？',
     graeweGroup: 'GRAEWE集团',
@@ -107,5 +108,29 @@ export const zh: TranslationKeys = {
     bundleHeight: '束高 H [mm]',
     disclaimer: '计算的线圈长度可能有高达10%的偏差。我们对结果的准确性不承担任何责任。',
     disclaimerTitle: '注意'
+  },
+
+  seo: {
+    title: '管材盘卷长度计算器 | GRAEWE Coiler Calculator',
+    description:
+      '免费在线计算管材和型材的盘卷长度与收卷终止位置：层数、每层管数、盘卷高度和外径，输入参数即可立即得出结果。',
+    keywords: '盘卷长度计算, 收卷终止位置, 管材收卷机, 盘卷宽度, 管材挤出, GRAEWE',
+    heading: '管材与型材盘卷长度计算器',
+    aboutTitle: '关于 GRAEWE 盘卷计算器',
+    aboutIntro:
+      'GRAEWE Coiler Calculator 用于计算管材和型材在收卷时的盘卷长度与收卷终止位置。计算依据与 GRAEWE 收卷机相同的公式：各层按六方密排排列，层高为 d × √3/2，并按每一层的三维螺旋线长度累加。所有尺寸以毫米输入，盘卷长度以米输出，可直接在浏览器中使用，无需安装，并支持离线使用。',
+    faq1Question: '什么是盘卷长度？',
+    faq1Answer:
+      '盘卷长度是指在给定内径 (ID)、外径 (OD) 和盘卷宽度 (W) 的条件下，一个盘卷所能容纳的最大管材或型材长度。计算器逐层排布，直到达到外径为止，并将各层的螺旋线长度相加。',
+    faq2Question: '什么是收卷终止位置？',
+    faq2Answer:
+      '收卷终止位置表示已知长度 (L) 的管材在盘卷上的结束位置。计算器给出层数 (i)、最后一层的管数 (ni)、旋转圈数 (r)，以及由此得出的盘卷高度 (H) 和外径。',
+    faq3Question: '不等层与等层错排有什么区别？',
+    faq3Answer:
+      '在“不等层”方式中，每层管数在 n 与 n−1 之间交替，使下一层的管材落入上一层的间隙中。在“等层错排”方式中，每层管数保持不变，各层错开半个管径。收卷方式会影响可用盘卷宽度和可达到的盘卷长度。',
+    faq4Question: '需要输入哪些参数？',
+    faq4Answer:
+      '计算盘卷长度需要：管径 (d)、内径 (ID)、外径 (OD) 和盘卷宽度 (W)。计算终止位置需要：管径 (d)、长度 (L)、内径 (ID) 和每层管数。计算结果可能存在最多 10% 的偏差。',
+    noscript: '交互式计算需要 JavaScript，请在浏览器中启用 JavaScript。'
   }
 }

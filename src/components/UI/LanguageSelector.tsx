@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useLanguage } from '../../contexts/LanguageContext'
-import { Language } from '../../i18n'
+import { LANGUAGE_NAMES, Language, SUPPORTED_LANGUAGES } from '../../i18n'
 
 interface LanguageOption {
   code: Language
@@ -8,16 +8,22 @@ interface LanguageOption {
   flag: string
 }
 
-const languages: LanguageOption[] = [
-  { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
-  { code: 'en', name: 'English', flag: '🇬🇧' },
-  { code: 'fr', name: 'Français', flag: '🇫🇷' },
-  { code: 'ru', name: 'Русский', flag: '🇷🇺' },
-  { code: 'es', name: 'Español', flag: '🇪🇸' },
-  { code: 'it', name: 'Italiano', flag: '🇮🇹' },
-  { code: 'zh', name: '中文', flag: '🇨🇳' },
-  { code: 'ja', name: '日本語', flag: '🇯🇵' }
-]
+const FLAGS: Record<Language, string> = {
+  de: '🇩🇪',
+  en: '🇬🇧',
+  fr: '🇫🇷',
+  ru: '🇷🇺',
+  es: '🇪🇸',
+  it: '🇮🇹',
+  zh: '🇨🇳',
+  ja: '🇯🇵'
+}
+
+const languages: LanguageOption[] = SUPPORTED_LANGUAGES.map((code) => ({
+  code,
+  name: LANGUAGE_NAMES[code],
+  flag: FLAGS[code]
+}))
 
 export const LanguageSelector: React.FC = () => {
   const { language, setLanguage } = useLanguage()

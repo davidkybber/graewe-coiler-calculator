@@ -104,6 +104,32 @@ The app is configured as a PWA with:
 - Web app manifest for installation
 - Optimized caching strategies
 
+### SEO Configuration
+
+The site is deployed at `https://graewe-coiler-calculator.de` and is indexed as one
+page per language:
+
+| URL | Purpose |
+| --- | --- |
+| `/` | `x-default` — adapts to the visitor (stored preference / browser language), self-canonical |
+| `/de/`, `/en/`, `/fr/`, `/ru/`, `/es/`, `/it/`, `/zh/`, `/ja/` | One indexable page per language, self-canonical, linked via `hreflang` |
+
+- `src/seo/head.ts` builds the `<head>` block (title, description, canonical,
+  hreflang, Open Graph, Twitter cards, JSON-LD `WebApplication` / `WebSite` /
+  `Organization` / `FAQPage`), the crawlable `<noscript>` fallback and the sitemap.
+- The `seo` Vite plugin in `vite.config.ts` fills the placeholders in `index.html`
+  and, after the build, writes `dist/<lang>/index.html` plus `dist/sitemap.xml`.
+- All copy lives in the `seo.*` keys of `src/i18n/<lang>.ts` — the rendered page and
+  the static markup share the same strings, so they can never drift apart.
+- `src/hooks/useSeoSync.ts` keeps title, description, canonical, `<html lang>` and
+  the JSON-LD in sync when the language changes at runtime.
+- `public/robots.txt` points crawlers at the sitemap; `public/og-image.png` is the
+  1200×630 social preview.
+
+To add a language: add it to `SUPPORTED_LANGUAGES` in `src/i18n/index.ts` (plus the
+translation file and `OG_LOCALES` in `src/seo/siteConfig.ts`) — the page, hreflang
+cluster, sitemap entry and footer link follow automatically.
+
 ### Build Configuration
 
 - TypeScript strict mode enabled
